@@ -18,77 +18,168 @@ import java.util.List;
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
-    @Operation(summary = "Get the whole list of Ads", tags = "Объявления")
+    @Operation(summary = "Получить все объявления", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of Ads",
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = AdsDto.class)
                     )})
     })
+
     @GetMapping
     public ResponseEntity<List<AdsDto>> getAdsAll() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "Adding an ad", tags = "Объявления")
+
+    @Operation(summary = "Добавить объявление", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ads Adding",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                                                   schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
                     )})
     })
     @PostMapping
     public AdsDto addAd(@RequestBody AdsDto adsDto) {
         return new AdsDto();
     }
-    @Operation(summary = "Getting information about the ad by id", tags = "Объявления")
+
+    @Operation(summary = "Получить информацию об объявлении", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of Ads",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                                                   schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
                     )})
     })
     @GetMapping("/{id}")
     public ResponseEntity<List<AdsDto>> getAds(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "Deleting an ad by id", tags = "Объявления")
+
+    @Operation(summary = "Удалить объявление", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ad removed",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                                                   schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
                     )})
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<AdsDto> deleteAds(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "Updating information about the ad by id", tags = "Объявления")
+
+    @Operation(summary = "Обновить информацию об объявлении", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "the ad has been updated",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                                                   schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
                     )})
     })
     @PatchMapping("/{id}")
     public AdsDto updateAds(@PathVariable Long id) {
         return new AdsDto();
     }
-    @Operation(summary = "We receive ads from an authorized user", tags = "Объявления")
+
+    @Operation(summary = "Получить объявление авторизованного пользователя", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ad received",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                                                   schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
                     )})
     })
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAdsAuthorizedUser() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "update the ad image", tags = "Объявления")
+
+    @Operation(summary = "Обновить картинку объявления", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "the picture has been updated",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                                                   schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AdsDto.class)
                     )})
     })
     @PatchMapping("/id/image")
@@ -98,11 +189,12 @@ public class AdsController {
 
     /**
      * Viktor
+     *
      * @return
      */
-    @Operation(summary = "Get ad comments", tags = "Комментарии")
+    @Operation(summary = "Получить комментарии объявления", tags = "Комментарии")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of comments",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = CommentDto.class)
                     )}),
@@ -117,9 +209,9 @@ public class AdsController {
         return new CommentDto();
     }
 
-    @Operation(summary = "Add comments to the ad", tags = "Комментарии")
+    @Operation(summary = "Добавить комментарий к объявлению", tags = "Комментарии")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Comment Adding",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = CommentDto.class)
                     )}),
@@ -143,9 +235,9 @@ public class AdsController {
         return new CommentDto();
     }
 
-    @Operation(summary = "Delete a comment in an ad by number id", tags = "Комментарии")
+    @Operation(summary = "Удалить комментарий", tags = "Комментарии")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Comment Deleted",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = CommentDto.class)
                     )}),
@@ -168,9 +260,9 @@ public class AdsController {
         return new CommentDto();
     }
 
-    @Operation(summary = "Updating a comment in an ad by number id", tags = "Комментарии")
+    @Operation(summary = "Обновить комментарий", tags = "Комментарии")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Comment Updated",
+            @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = CommentDto.class)
                     )}),
