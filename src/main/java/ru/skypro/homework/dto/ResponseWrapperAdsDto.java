@@ -2,8 +2,10 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ResponseWrapperAdsDto {
     private int count;
-    private AdsDto[] results;
+    private List<AdsDto> results;
 }
