@@ -58,7 +58,7 @@ public class UserController {
                     content = @Content)
     })
     @GetMapping("/me")
-    public UserDto getUser(@RequestBody UserDto user) {
+    public UserDto getUser() {
         return new UserDto();
     }
 
@@ -83,7 +83,6 @@ public class UserController {
     })
     @PatchMapping("/me")
     public UserDto updateUser(@RequestBody UserDto user) {
-        System.out.println("Yo");
         return new UserDto();
     }
 
@@ -95,7 +94,7 @@ public class UserController {
                     description = "Not Found")
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateUserImage(@RequestParam MultipartFile avatar) {
+    public void updateUserImage(@RequestParam MultipartFile image) {
 
     }
 
