@@ -55,7 +55,7 @@ public class CommentController {
 
     })
     @PostMapping("/{id}/comments")
-    public CommentDto addCommentAds(@RequestBody CommentDto commentDto) {
+    public CommentDto addCommentAds(@PathVariable Long id, @RequestBody CommentDto commentDto) {
         System.out.println("Comment add");
         return new CommentDto();
     }
@@ -104,7 +104,7 @@ public class CommentController {
                     )})
     })
     @PatchMapping("/{adId}/comments/{commentId}")
-    public CommentDto updateCommentAds(@RequestBody CommentDto commentDto) {
+    public CommentDto updateCommentAds(@PathVariable Long adId, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
         System.out.println("Update comment");
         return new CommentDto();
     }
