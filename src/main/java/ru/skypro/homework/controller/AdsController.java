@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CreateAdsDto;
 
 
 import java.util.List;
@@ -63,7 +64,7 @@ public class AdsController {
                     )})
     })
     @PostMapping
-    public AdsDto addAd(@RequestBody AdsDto adsDto) {
+    public AdsDto addAd(@RequestBody CreateAdsDto createAdsDto,@RequestBody String image) {
         return new AdsDto();
     }
 
@@ -135,7 +136,7 @@ public class AdsController {
                     )})
     })
     @PatchMapping("/{id}")
-    public AdsDto updateAds(@PathVariable Long id) {
+    public AdsDto updateAds(@PathVariable Long id, @RequestBody CreateAdsDto createAdsDto) {
         return new AdsDto();
     }
 
@@ -182,8 +183,8 @@ public class AdsController {
                             schema = @Schema(implementation = AdsDto.class)
                     )})
     })
-    @PatchMapping("/id/image")
-    public AdsDto updateImage(@PathVariable Long id) {
+    @PatchMapping("/{id}/image")
+    public AdsDto updateImage(@PathVariable Long id, @RequestBody String image) {
         return new AdsDto();
     }
 
