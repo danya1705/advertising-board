@@ -1,11 +1,14 @@
 package ru.skypro.homework.entity;
 
+import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 
+@Data
 @Entity
-public class UserAds {
+@Table(name = "user_ads")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +30,6 @@ public class UserAds {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
 
 }
