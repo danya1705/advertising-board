@@ -15,7 +15,7 @@ public class Ads {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
 
-    private Integer autor;
+    private Integer author;
 
     private int price ;
 
