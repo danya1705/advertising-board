@@ -10,9 +10,10 @@ import javax.persistence.*;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer adId;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer commentId;
 
