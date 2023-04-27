@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -26,10 +27,16 @@ public class User {
 
     private String email;
 
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "image")
+    private Image image;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "author")
+    private List<Ads> adsList;
 
+    @OneToMany(mappedBy = "author")
+    private List<Comment> commentsList;
 }

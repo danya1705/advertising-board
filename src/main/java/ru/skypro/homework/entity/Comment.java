@@ -10,18 +10,18 @@ import javax.persistence.*;
 public class Comment {
 
     @Id
+    @ManyToOne
+    @JoinColumn(name = "adId")
+    private Ads ad;
 
-    private Integer adId;
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentId;
 
-    private Integer author;
+    @ManyToOne
+    @JoinColumn(name = "author")
+    private User author;
 
     private Long createdAt;
-
     private String text;
-
-
 }

@@ -2,10 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -15,17 +12,19 @@ public class Ads {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
 
-    private Integer author;
+    @ManyToOne
+    @JoinColumn(name = "author")
+    private User author;
 
     private int price ;
-
-    private String firstName;
 
     private String title;
 
     private String description;
 
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "image")
+    private Image image;
 
 
 }
