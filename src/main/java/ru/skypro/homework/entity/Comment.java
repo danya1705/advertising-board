@@ -11,7 +11,7 @@ public class Comment {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "adId")
+    @JoinColumn(name = "ad_id")
     private Ads ad;
 
     @Id
