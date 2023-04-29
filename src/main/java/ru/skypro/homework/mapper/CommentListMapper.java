@@ -10,9 +10,9 @@ import ru.skypro.homework.entity.Ads;
         uses = {CommentMapper.class},
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         imports = Ads.class)
-public abstract class CommentListMapper {
+public interface CommentListMapper {
 
     @Mapping(expression = "java(ad.getCommentsList().size())", target = "count")
     @Mapping(source = "commentsList", target = "results")
-    abstract ResponseWrapperCommentDto toDto(Ads ad);
+    ResponseWrapperCommentDto toDto(Ads ad);
 }
