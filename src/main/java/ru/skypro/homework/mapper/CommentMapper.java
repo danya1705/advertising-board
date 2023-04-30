@@ -30,6 +30,7 @@ public abstract class CommentMapper {
     @Mapping(target = "commentId", ignore = true)
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "adsList", ignore = true)
     abstract void updateComment(CommentDto commentDto, @MappingTarget Comment comment);
 
     Comment toComment(CommentDto commentDto, Integer adsId) {

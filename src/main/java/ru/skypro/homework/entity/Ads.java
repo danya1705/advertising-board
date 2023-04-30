@@ -1,12 +1,12 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
+
 public class Ads {
 
     @Id
@@ -29,6 +29,5 @@ public class Ads {
 
     @OneToMany(mappedBy = "ad")
     private List<Comment> commentsList;
-
 
 }

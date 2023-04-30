@@ -1,7 +1,5 @@
 package ru.skypro.homework.entity;
-
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
@@ -24,4 +22,5 @@ public class Comment {
 
     private Long createdAt;
     private String text;
+
 }
