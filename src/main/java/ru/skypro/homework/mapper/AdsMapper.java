@@ -10,26 +10,22 @@ import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.User;
 
-
-
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR, imports = User.class)
 public interface AdsMapper {
-
 
     @Mapping(source = "author.id", target = "author")
     @Mapping(source = "image.filePath", target = "image")
     AdsDto toDto(Ads ad);
 
-    CreateAdsDto newToAds(Ads ad);
+    @Mapping(source = "author.firstName", target = "authorFirstName")
+    @Mapping(source = "author.lastName", target = "authorLastName")
+    @Mapping(source = "image.filePath", target = "image")
+    @Mapping(source = "author.phone", target = "phone")
+    @Mapping(source = "author.email", target = "email")
+    FullAdsDto toFullAdsDto(Ads ads);
 
-    @Mapping(source = "image", target = "image.filePath")
-    Ads toNFullAdsDto(FullAdsDto fullAdsDto);
+    Ads toAds(CreateAdsDto createAdsDto);
 
-    @Mapping(source = "author", target = "author.id")
-    @Mapping(source = "image", target = "image.filePath")
-    void updateModel(AdsDto adsDto,@MappingTarget Ads ad);
-
-
-
+    void updateAds(CreateAdsDto createAdsDto, @MappingTarget Ads ad);
 }

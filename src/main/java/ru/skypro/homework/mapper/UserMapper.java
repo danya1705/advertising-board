@@ -9,7 +9,7 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-public abstract class UserMapper {
+public interface UserMapper {
 
     @Mapping(source = "user.id", target = "id")
     @Mapping(source = "user.firstName", target = "firstName")
@@ -17,11 +17,11 @@ public abstract class UserMapper {
     @Mapping(source = "user.phone", target = "phone")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.image.filePath", target = "image")
-    abstract UserDto toDto(User user);
+    UserDto toDto(User user);
 
     @Mapping(source = "userDto.image", target = "user.image.filePath")
-    abstract void updateUser(UserDto userDto, @MappingTarget User user);
+    void updateUser(UserDto userDto, @MappingTarget User user);
 
     @Mapping(source = "newPasswordDto.newPassword", target = "password")
-    abstract void updateUserPassword(NewPasswordDto newPasswordDto, @MappingTarget User user);
+    void updateUserPassword(NewPasswordDto newPasswordDto, @MappingTarget User user);
 }
