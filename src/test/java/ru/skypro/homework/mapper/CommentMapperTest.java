@@ -30,8 +30,8 @@ class CommentMapperTest {
     public static final int WRONG_USER_ID = 2;
     public static final String USER_FIRST_NAME = "firstName";
     public static final String WRONG_USER_FIRST_NAME = "wrongFirstName";
-    public static final String PATH_TO_IMAGE = "filePath";
-    public static final String WRONG_PATH_TO_IMAGE = "wrongFilePath";
+    public static final String IMAGE_URL = "Some URL";
+    public static final String WRONG_IMAGE_URL = "Some wrong URL";
     public static final int AD_ID = 333;
     @Mock
     private UserService userService;
@@ -44,7 +44,7 @@ class CommentMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
-        image.setFilePath(PATH_TO_IMAGE);
+        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setId(USER_ID);
@@ -66,7 +66,7 @@ class CommentMapperTest {
         Assertions.assertThat(dto.getCreatedAt()).isEqualTo(DATE_MILLIS);
         Assertions.assertThat(dto.getAuthor()).isEqualTo(USER_ID);
         Assertions.assertThat(dto.getAuthorFirstName()).isEqualTo(USER_FIRST_NAME);
-        Assertions.assertThat(dto.getAuthorImage()).isEqualTo(PATH_TO_IMAGE);
+        Assertions.assertThat(dto.getAuthorImage()).isEqualTo(IMAGE_URL);
 
     }
 
@@ -74,10 +74,10 @@ class CommentMapperTest {
     void updateCommentTest() {
 
         Image image = new Image();
-        image.setFilePath(PATH_TO_IMAGE);
+        image.setUrl(IMAGE_URL);
 
         Image wrongImage = new Image();
-        image.setFilePath(WRONG_PATH_TO_IMAGE);
+        image.setUrl(WRONG_IMAGE_URL);
 
         User user = new User();
         user.setFirstName(USER_FIRST_NAME);
@@ -98,7 +98,7 @@ class CommentMapperTest {
         dto.setPk(WRONG_COMMENT_ID);
         dto.setAuthor(WRONG_USER_ID);
         dto.setAuthorFirstName(WRONG_USER_FIRST_NAME);
-        dto.setAuthorImage(WRONG_PATH_TO_IMAGE);
+        dto.setAuthorImage(WRONG_IMAGE_URL);
         dto.setCreatedAt(WRONG_DATE_MILLIS);
         dto.setText(NEW_TEXT);
 

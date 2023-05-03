@@ -5,22 +5,32 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.service.AdsService;
 
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
+@Log
 public class AdsController {
+
+    private final AdsService adsService;
+
+    public AdsController(AdsService adsService) {
+        this.adsService = adsService;
+    }
+
     @Operation(summary = "Получить все объявления", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
@@ -52,15 +62,13 @@ public class AdsController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = AdsDto.class)
                     )}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {}),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = {}),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = {})
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdsDto> addAd(
             @RequestPart(name = "properties") CreateAdsDto createAdsDto,
-            @RequestPart(name = "image") MultipartFile image) {
-        return new ResponseEntity<>(new AdsDto(), HttpStatus.CREATED);
+            @RequestPart(name = "image") MultipartFile imageFile) throws IOException {
+        return new ResponseEntity<>(adsService.createAd(createAdsDto, imageFile), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Получить информацию об объявлении", tags = "Объявления")
@@ -163,12 +171,14 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE)}),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = {})
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     @PatchMapping(value = "/{id}/image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> updateImage(@PathVariable Long id, @RequestParam MultipartFile image) {
-        return ResponseEntity.ok(new byte[0]);
+    public ResponseEntity<byte[]> updateImage(@PathVariable int id, @RequestParam MultipartFile image) throws IOException {
+        log.info("Updating image for advertisement with id = " + id);
+        return ResponseEntity.ok(adsService.editAdImage(id, image));
     }
 }

@@ -77,3 +77,6 @@ ALTER TABLE user_ads ADD FOREIGN KEY (image) REFERENCES image(id);
 ALTER TABLE image RENAME COLUMN filepath TO file_path;
 ALTER TABLE image RENAME COLUMN fileSize TO file_size;
 ALTER TABLE image RENAME COLUMN mediaType TO media_type;
+
+--changeset dKarpov:4
+ALTER TABLE image ADD COLUMN IF NOT EXISTS url TEXT;

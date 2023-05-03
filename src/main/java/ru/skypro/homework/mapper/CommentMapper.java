@@ -22,7 +22,7 @@ public abstract class CommentMapper {
 
     @Mapping(source = "commentId", target = "pk")
     @Mapping(source = "author.id", target = "author")
-    @Mapping(source = "author.image.filePath", target = "authorImage")
+    @Mapping(source = "author.image.url", target = "authorImage")
     @Mapping(source = "author.firstName", target = "authorFirstName")
     abstract CommentDto toDto(Comment comment);
 

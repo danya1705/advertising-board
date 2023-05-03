@@ -26,8 +26,8 @@ public class UserMapperTest {
     public static final String WRONG_PHONE = "22222222222";
     public static final String EMAIL = "Name@mail.ru";
     public static final String WRONG_EMAIL = "WrongName@mail.ru";
-    public static final String PATH_TO_IMAGE = "filePath";
-    public static final String WRONG_PATH_TO_IMAGE = "wrongFilePath";
+    public static final String IMAGE_URL = "filePath";
+    public static final String WRONG_IMAGE_URL = "wrongFilePath";
 
 
     @InjectMocks
@@ -37,7 +37,7 @@ public class UserMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
-        image.setFilePath(PATH_TO_IMAGE);
+        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setId(USER_ID);
@@ -57,15 +57,15 @@ public class UserMapperTest {
         Assertions.assertThat(dto.getLastName()).isEqualTo(LAST_NAME);
         Assertions.assertThat(dto.getPhone()).isEqualTo(PHONE);
         Assertions.assertThat(dto.getEmail()).isEqualTo(EMAIL);
-        Assertions.assertThat(dto.getImage()).isEqualTo(PATH_TO_IMAGE);
+        Assertions.assertThat(dto.getImage()).isEqualTo(IMAGE_URL);
     }
 
     @Test
     void updateUserTest() {
         Image wrongImage = new Image();
-        wrongImage.setFilePath(WRONG_PATH_TO_IMAGE);
+        wrongImage.setUrl(WRONG_IMAGE_URL);
         Image image = new Image();
-        image.setFilePath(PATH_TO_IMAGE);
+        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setId(WRONG_USER_ID);
@@ -83,7 +83,7 @@ public class UserMapperTest {
         userDto.setLastName(LAST_NAME);
         userDto.setPhone(PHONE);
         userDto.setEmail(EMAIL);
-        userDto.setImage(image.getFilePath());
+        userDto.setImage(image.getUrl());
 
         userMapper.updateUser(userDto, user);
 
@@ -93,7 +93,7 @@ public class UserMapperTest {
         Assertions.assertThat(user.getLastName()).isEqualTo(LAST_NAME);
         Assertions.assertThat(user.getPhone()).isEqualTo(PHONE);
         Assertions.assertThat(user.getEmail()).isEqualTo(EMAIL);
-        Assertions.assertThat(user.getImage().getFilePath()).isEqualTo(PATH_TO_IMAGE);
+        Assertions.assertThat(user.getImage().getUrl()).isEqualTo(IMAGE_URL);
     }
 
     @Test

@@ -16,10 +16,10 @@ public interface UserMapper {
     @Mapping(source = "user.lastName", target = "lastName")
     @Mapping(source = "user.phone", target = "phone")
     @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "user.image.filePath", target = "image")
+    @Mapping(source = "user.image.url", target = "image")
     UserDto toDto(User user);
 
-    @Mapping(source = "userDto.image", target = "user.image.filePath")
+    @Mapping(source = "userDto.image", target = "user.image.url")
     void updateUser(UserDto userDto, @MappingTarget User user);
 
     @Mapping(source = "newPasswordDto.newPassword", target = "password")
