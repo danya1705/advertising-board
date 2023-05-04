@@ -79,7 +79,7 @@ class CommentListMapperTest {
         firstAd.setCommentsList(List.of(firstComment,secondComment,thirdComment));
         secondAd.setCommentsList(List.of(fourthComment));
 
-        ResponseWrapperCommentDto dto = commentListMapper.toDto(firstAd);
+        ResponseWrapperCommentDto dto = commentListMapper.toResponseWrapperCommentDto(firstAd);
 
         Assertions.assertThat(dto).isNotNull();
         Assertions.assertThat(dto.getCount()).isEqualTo(3);

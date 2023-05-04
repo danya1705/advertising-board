@@ -2,20 +2,22 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAdsDto;
 import ru.skypro.homework.entity.Ads;
-import ru.skypro.homework.entity.Comment;
-import ru.skypro.homework.entity.User;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
         uses = {AdsMapper.class},
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        imports = User.class)
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AdsListMapper {
-    @Mapping(expression = "java(user.getAdsList().size())", target = "count")
-    @Mapping(source = "adsList", target = "results")
-    ResponseWrapperAdsDto toDto(User user);
+    List<AdsDto> toDto(List<Ads> adsList);
+
+    default ResponseWrapperAdsDto toResponseWrapperAdsDto(List<Ads> adsList) {
+        ResponseWrapperAdsDto dto = new ResponseWrapperAdsDto();
+        dto.setCount(adsList.size());
+        dto.setResults(toDto(adsList));
+        return dto;
+    }
 }

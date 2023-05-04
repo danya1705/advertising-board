@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.dto.ResponseWrapperAdsDto;
 import ru.skypro.homework.service.AdsService;
 
 
@@ -180,5 +182,19 @@ public class AdsController {
     public ResponseEntity<byte[]> updateImage(@PathVariable int id, @RequestParam MultipartFile image) throws IOException {
         log.info("Updating image for advertisement with id = " + id);
         return ResponseEntity.ok(adsService.editAdImage(id, image));
+    }
+
+    @Operation(summary = "Поиск объявления по названию", tags = "Объявления")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = AdsDto.class))
+                    )}
+            )
+    })
+    @GetMapping("/{namePart}")
+    public ResponseEntity<ResponseWrapperAdsDto> getAdsByNamePart(@PathVariable String namePart) {
+        return ResponseEntity.ok(adsService.getAdsByNamePart(namePart));
     }
 }

@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.dto.ResponseWrapperAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.AdsListMapper;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsRepository;
 
@@ -19,13 +21,20 @@ public class AdsService {
     private final UserService userService;
     private final ImageService imageService;
     private final AdsMapper mapper;
+    private final AdsListMapper listMapper;
     private final Logger logger = Logger.getLogger("AdsServiceLogger");
 
-    public AdsService(AdsRepository adsRepository, UserService userService, ImageService imageService, AdsMapper mapper) {
+    public AdsService(
+            AdsRepository adsRepository,
+            UserService userService,
+            ImageService imageService,
+            AdsMapper mapper,
+            AdsListMapper listMapper) {
         this.adsRepository = adsRepository;
         this.userService = userService;
         this.imageService = imageService;
         this.mapper = mapper;
+        this.listMapper = listMapper;
     }
 
     public Ads getAdById(Integer id) {
@@ -50,5 +59,9 @@ public class AdsService {
         ad.setAuthor(author);
         ad.setImage(imageService.uploadImage(imageFile));
         return mapper.toDto(adsRepository.save(ad));
+    }
+
+    public ResponseWrapperAdsDto getAdsByNamePart(String namePart) {
+        return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContaining(namePart));
     }
 }

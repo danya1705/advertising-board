@@ -14,5 +14,5 @@ public interface CommentListMapper {
 
     @Mapping(expression = "java(ad.getCommentsList().size())", target = "count")
     @Mapping(source = "commentsList", target = "results")
-    ResponseWrapperCommentDto toDto(Ads ad);
+    ResponseWrapperCommentDto toResponseWrapperCommentDto(Ads ad);
 }
