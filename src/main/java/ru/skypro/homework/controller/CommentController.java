@@ -30,7 +30,7 @@ public class CommentController {
                     )})
     })
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentDto>> getCommentsAds(@PathVariable Long id) {
+    public ResponseEntity<List<CommentDto>> getCommentsAds(@PathVariable Integer id) {
             return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class CommentController {
 
     })
     @PostMapping("/{id}/comments")
-    public CommentDto addCommentAds(@PathVariable Long id, @RequestBody CommentDto commentDto) {
+    public CommentDto addCommentAds(@PathVariable Integer id, @RequestBody CommentDto commentDto) {
         System.out.println("Comment add");
         return new CommentDto();
     }
@@ -80,7 +80,7 @@ public class CommentController {
                     )})
     })
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDto> deleteCommentAds(@PathVariable Long adId, @PathVariable Long commentId) {
+    public ResponseEntity<CommentDto> deleteCommentAds(@PathVariable Integer adId, @PathVariable Integer commentId) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -104,7 +104,7 @@ public class CommentController {
                     )})
     })
     @PatchMapping("/{adId}/comments/{commentId}")
-    public CommentDto updateCommentAds(@PathVariable Long adId, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
+    public CommentDto updateCommentAds(@PathVariable Integer adId, @PathVariable Integer commentId, @RequestBody CommentDto commentDto) {
         System.out.println("Update comment");
         return new CommentDto();
     }
