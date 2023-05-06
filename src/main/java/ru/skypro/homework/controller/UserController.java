@@ -33,22 +33,17 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "OK",
                     content = @Content),
-            @ApiResponse(responseCode = "204",
-                    description = "No content",
-                    content = @Content),
             @ApiResponse(responseCode = "401",
                     description = "Unauthorized",
                     content = @Content),
             @ApiResponse(responseCode = "403",
                     description = "Forbidden",
-                    content = @Content),
-            @ApiResponse(responseCode = "404",
-                    description = "Not Found",
                     content = @Content)
     })
     @PostMapping("/set_password")
-    public NewPasswordDto setPassword() {
-        return new NewPasswordDto();
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+        userService.editUserPassword(1, newPasswordDto);
+        return ResponseEntity.ok(newPasswordDto);
     }
 
     @Operation(summary = "Получить информацию об авторизованном пользователе", tags = "Пользователи")
@@ -56,22 +51,17 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserDto.class))}),
-            @ApiResponse(responseCode = "204",
-                    description = "No content",
-                    content = @Content),
             @ApiResponse(responseCode = "401",
                     description = "Unauthorized",
                     content = @Content),
-            @ApiResponse(responseCode = "403",
-                    description = "Forbidden",
-                    content = @Content),
-            @ApiResponse(responseCode = "404",
-                    description = "Not Found",
-                    content = @Content)
     })
     @GetMapping("/me")
-    public UserDto getUser() {
-        return new UserDto();
+    public ResponseEntity<UserDto> getUser() {
+        if (userService.getUserInfo(1) != null) {
+            return ResponseEntity.ok(userService.getUserInfo(1));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Обновить информацию об авторизованном пользователе", tags = "Пользователи")
@@ -79,23 +69,13 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserDto.class))}),
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "No content",
-                    content = @Content),
             @ApiResponse(responseCode = "401",
-                    description = "Unauthorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "403",
-                    description = "Forbidden",
-                    content = @Content),
-            @ApiResponse(responseCode = "404",
-                    description = "Not Found",
-                    content = @Content)
+                    description = "Unauthorized")
     })
     @PatchMapping("/me")
-    public UserDto updateUser(@RequestBody UserDto user) {
-        return new UserDto();
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        userService.updateUser(userDto);
+        return ResponseEntity.ok(userDto);
     }
 
     @Operation(summary = "Обновить аватар авторизованного пользователя", tags = "Пользователи")
