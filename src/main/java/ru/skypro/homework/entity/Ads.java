@@ -1,6 +1,8 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import ru.skypro.homework.dto.AdsDto;
+
 import javax.persistence.*;
 import java.util.List;
 
