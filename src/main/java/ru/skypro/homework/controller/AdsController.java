@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAdsDto;
+import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.service.AdsService;
 
 
@@ -55,7 +56,7 @@ public class AdsController {
 
     @GetMapping
     public ResponseEntity<List<AdsDto>> getAdsAll() {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(adsService.getAdsAll());
     }
 
     @Operation(summary = "Добавить объявление", tags = "Объявления")
@@ -93,8 +94,8 @@ public class AdsController {
                     )})
     })
     @GetMapping("/{id}")
-    public ResponseEntity<List<AdsDto>> getAds(@PathVariable Long id) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<AdsDto>> getAds(@PathVariable Integer id) {
+        return ResponseEntity.ok((List<AdsDto>) adsService.getAdsById(id));
     }
 
     @Operation(summary = "Удалить объявление", tags = "Объявления")
@@ -117,8 +118,8 @@ public class AdsController {
                     )})
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<AdsDto> deleteAds(@PathVariable Long id) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<AdsDto> deleteAds(@PathVariable Integer id) {
+        return adsService.deleteAds(id);
     }
 
     @Operation(summary = "Обновить информацию об объявлении", tags = "Объявления")
@@ -141,8 +142,8 @@ public class AdsController {
                     )})
     })
     @PatchMapping("/{id}")
-    public AdsDto updateAds(@PathVariable Long id, @RequestBody CreateAdsDto createAdsDto) {
-        return new AdsDto();
+    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id, @RequestBody CreateAdsDto createAdsDto) {
+        return ResponseEntity.ok(adsService.updateAds(id, createAdsDto));
     }
 
     @Operation(summary = "Получить объявление авторизованного пользователя", tags = "Объявления")
@@ -166,7 +167,11 @@ public class AdsController {
     })
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAdsAuthorizedUser() {
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (adsService.getAdsInfo(1) != null) {
+            return ResponseEntity.ok(adsService.getAdsInfo(1));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Обновить картинку объявления", tags = "Объявления")
