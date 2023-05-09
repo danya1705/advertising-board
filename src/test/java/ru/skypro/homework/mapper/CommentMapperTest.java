@@ -3,19 +3,12 @@ package ru.skypro.homework.mapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
-import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.UserService;
-
-import static org.mockito.ArgumentMatchers.eq;
 
 @ExtendWith(MockitoExtension.class)
 class CommentMapperTest {
@@ -32,13 +25,8 @@ class CommentMapperTest {
     public static final String WRONG_USER_FIRST_NAME = "wrongFirstName";
     public static final String IMAGE_URL = "Some URL";
     public static final String WRONG_IMAGE_URL = "Some wrong URL";
-    public static final int AD_ID = 333;
-    @Mock
-    private UserService userService;
-    @Mock
-    private AdsService adsService;
-    @InjectMocks
-    private CommentMapperImpl commentMapper;
+
+    private final CommentMapperImpl commentMapper = new CommentMapperImpl();
 
     @Test
     void toDtoTest() {
@@ -76,16 +64,9 @@ class CommentMapperTest {
         Image image = new Image();
         image.setUrl(IMAGE_URL);
 
-        Image wrongImage = new Image();
-        image.setUrl(WRONG_IMAGE_URL);
-
         User user = new User();
         user.setFirstName(USER_FIRST_NAME);
         user.setImage(image);
-
-        User wrongUser = new User();
-        user.setFirstName(WRONG_USER_FIRST_NAME);
-        user.setImage(wrongImage);
 
         Comment comment = new Comment();
         comment.setAd(new Ads());
@@ -112,28 +93,4 @@ class CommentMapperTest {
 
     }
 
-    @Test
-    void toCommentTest() {
-
-        CommentDto dto = new CommentDto();
-        dto.setAuthor(USER_ID);
-        dto.setText(TEXT);
-
-        User user = new User();
-        user.setId(USER_ID);
-
-        Ads ad = new Ads();
-        ad.setPk(AD_ID);
-
-        Mockito.when(userService.getUserById(eq(USER_ID))).thenReturn(user);
-        Mockito.when(adsService.getAdById(eq(AD_ID))).thenReturn(ad);
-
-        Comment comment = commentMapper.toComment(dto, AD_ID);
-
-        Assertions.assertThat(comment).isNotNull();
-        Assertions.assertThat(comment.getAd()).isEqualTo(ad);
-        Assertions.assertThat(comment.getAuthor()).isEqualTo(user);
-        Assertions.assertThat(comment.getText()).isEqualTo(TEXT);
-
-    }
 }

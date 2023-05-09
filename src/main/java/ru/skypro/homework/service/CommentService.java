@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.CreateCommentDto;
 import ru.skypro.homework.dto.ResponseWrapperCommentDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.CommentListMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -35,37 +36,53 @@ public class CommentService {
     }
 
 
-    public ResponseWrapperCommentDto getCommentsAdById(Integer id) {
-        Ads ad = adsRepository.findById(id).get();
-        return commentListMapper.toResponseWrapperCommentDto(ad);
+    public ResponseWrapperCommentDto getCommentsByAdId(Integer id) {
+        Optional<Ads> ad = adsRepository.findById(id);
+        if (ad.isPresent()) {
+            return commentListMapper.toResponseWrapperCommentDto(ad.get());
+        } else {
+            logger.info("Ad with id=" + id + " not found");
+            return null;
+        }
     }
 
-    public CommentDto addCommentAd(Integer id, CreateCommentDto createCommentDto) {
+    public CommentDto addComment(Integer id, CreateCommentDto createCommentDto) {
+
         Comment comment = commentMapper.toComment(createCommentDto);
-        Ads ad = adsRepository.findById(id).get();
-        comment.setAd(ad);
-        comment.setAuthor(userRepository.findById(1).get());
+        Integer userId = 1;
+
+        Optional<Ads> ad = adsRepository.findById(id);
+        if (ad.isEmpty()) {
+            logger.info("Ad with id=" + id + " not found");
+            return null;
+        }
+
+        Optional<User> author = userRepository.findById(userId);
+        if (author.isEmpty()) {
+            logger.info("User with id=" + userId + " not found");
+            return null;
+        }
+
+        comment.setAd(ad.get());
+        comment.setAuthor(author.get());
         comment.setCreatedAt(System.currentTimeMillis());
         commentRepository.save(comment);
         return commentMapper.toDto(comment);
     }
 
-    public CommentDto deleteCommentAds(Integer adId, Integer commentId) {
-        Optional<Comment> optionalComment = commentRepository.findCommentByAd_PkAndCommentId(adId, commentId);
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-            commentRepository.delete(comment);
-            return commentMapper.toDto(comment);
-        }else
-            {
-                return null;
-            }
-
+    public void deleteComment(Integer commentId) {
+        commentRepository.deleteById(commentId);
     }
 
-    public CommentDto updateCommentAds(Integer adId, Integer commentId, CommentDto commentDto) {
-
-        return null;
+    public CommentDto updateComment(Integer commentId, CommentDto commentDto) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        if (comment.isPresent()) {
+            commentMapper.updateComment(commentDto, comment.get());
+            return commentMapper.toDto(commentRepository.save(comment.get()));
+        } else {
+            logger.info("Comment with id=" + commentId + " not found");
+            return null;
+        }
     }
 
 

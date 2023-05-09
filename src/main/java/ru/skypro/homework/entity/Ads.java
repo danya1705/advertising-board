@@ -1,15 +1,12 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
-import lombok.ToString;
-import ru.skypro.homework.dto.AdsDto;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
-@ToString
 public class Ads {
 
     @Id
