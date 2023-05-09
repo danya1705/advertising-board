@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CreateCommentDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
@@ -24,7 +25,9 @@ public abstract class CommentMapper {
     @Mapping(source = "author.id", target = "author")
     @Mapping(source = "author.image.url", target = "authorImage")
     @Mapping(source = "author.firstName", target = "authorFirstName")
-    abstract CommentDto toDto(Comment comment);
+    public abstract CommentDto toDto(Comment comment);
+
+    public abstract Comment toComment(CreateCommentDto createCommentDto);
 
     @Mapping(target = "ad", ignore = true)
     @Mapping(target = "commentId", ignore = true)

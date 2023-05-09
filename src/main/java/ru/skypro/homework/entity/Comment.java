@@ -1,8 +1,11 @@
 package ru.skypro.homework.entity;
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Data
+@ToString
 @Entity
 @IdClass(CommentId.class)
 public class Comment {

@@ -1,12 +1,14 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
+@ToString
 @Entity
 @Table(name = "user_ads")
 public class User {
