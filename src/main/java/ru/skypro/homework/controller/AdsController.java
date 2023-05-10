@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAdsDto;
-import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.service.AdsService;
 
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/ads")
@@ -38,24 +37,11 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = ResponseWrapperAdsDto.class)
                     )})
     })
-
     @GetMapping
-    public ResponseEntity<List<AdsDto>> getAdsAll() {
+    public ResponseEntity<ResponseWrapperAdsDto> getAdsAll() {
         return ResponseEntity.ok(adsService.getAdsAll());
     }
 
@@ -78,48 +64,25 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = FullAdsDto.class)
                     )}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )})
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content})
     })
     @GetMapping("/{id}")
-    public ResponseEntity<List<AdsDto>> getAds(@PathVariable Integer id) {
-        return ResponseEntity.ok((List<AdsDto>) adsService.getAdsById(id));
+    public ResponseEntity<FullAdsDto> getAd(@PathVariable Integer id) {
+        return ResponseEntity.ok(adsService.getAdInfo(id));
     }
 
     @Operation(summary = "Удалить объявление", tags = "Объявления")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )})
+            @ApiResponse(responseCode = "204", description = "No Content", content = {@Content()}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()}),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content()})
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<AdsDto> deleteAds(@PathVariable Integer id) {
-        return adsService.deleteAds(id);
+    public ResponseEntity deleteAd(@PathVariable Integer id) {
+        adsService.deleteAd(id);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Обновить информацию об объявлении", tags = "Объявления")
@@ -128,50 +91,26 @@ public class AdsController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = AdsDto.class)
                     )}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )})
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()}),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content()})
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id, @RequestBody CreateAdsDto createAdsDto) {
-        return ResponseEntity.ok(adsService.updateAds(id, createAdsDto));
+    public ResponseEntity<AdsDto> updateAd(@PathVariable Integer id, @RequestBody CreateAdsDto createAdsDto) {
+        return ResponseEntity.ok(adsService.updateAd(id, createAdsDto));
     }
 
     @Operation(summary = "Получить объявление авторизованного пользователя", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
+                            schema = @Schema(implementation = ResponseWrapperAdsDto.class)
                     )}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )}),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AdsDto.class)
-                    )})
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
     })
     @GetMapping("/me")
-    public ResponseEntity<AdsDto> getAdsAuthorizedUser() {
-        if (adsService.getAdsInfo(1) != null) {
-            return ResponseEntity.ok(adsService.getAdsInfo(1));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ResponseWrapperAdsDto> getAdsMe() {
+        Integer userId = 1;
+        return ResponseEntity.ok(adsService.getAdsMe(userId));
     }
 
     @Operation(summary = "Обновить картинку объявления", tags = "Объявления")
@@ -198,7 +137,7 @@ public class AdsController {
                     )}
             )
     })
-    @GetMapping("/{namePart}")
+    @GetMapping("/title/{namePart}")
     public ResponseEntity<ResponseWrapperAdsDto> getAdsByNamePart(@PathVariable String namePart) {
         return ResponseEntity.ok(adsService.getAdsByNamePart(namePart));
     }

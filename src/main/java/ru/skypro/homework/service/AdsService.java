@@ -1,12 +1,10 @@
 package ru.skypro.homework.service;
 
-import liquibase.pro.packaged.A;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.User;
@@ -14,9 +12,7 @@ import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.AdsRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -70,48 +66,29 @@ public class AdsService {
         return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContaining(namePart));
     }
 
-    public List<AdsDto> getAdsAll(){
+    public ResponseWrapperAdsDto getAdsAll(){
         List<Ads> ads = adsRepository.findAll();
-        List<AdsDto> adsList = new ArrayList<>();
-        for (Ads ad : ads) {
-            AdsDto adDto = new AdsDto();
-            adsList.add(adDto);
-        }
-        return adsList;
+        return listMapper.toResponseWrapperAdsDto(ads);
     }
 
-    public Ads getAdsById(Integer id) {
-        return adsRepository.findById(id)
-                .orElseGet(() -> {
-                            logger.info("Ads with id=" + id + " noy found");
-                            return null;
-                        }
-                );
+    public FullAdsDto getAdInfo(Integer id) {
+        return mapper.toFullAdsDto(getAdById(id));
     }
 
-    public ResponseEntity<AdsDto> deleteAds(Integer id) {
-        Optional<Ads> optionalAds = adsRepository.findById(id);
-        if (optionalAds.isPresent()) {
-            Ads ads = optionalAds.get();
-            adsRepository.delete(ads);
-            return new ResponseEntity<>(new AdsDto(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public void deleteAd(Integer id) {
+        Ads ad = getAdById(id);
+        adsRepository.delete(ad);
     }
 
-
-    public AdsDto updateAds(Integer id, CreateAdsDto createAdsDto) {
-        Ads ad = mapper.toAds(createAdsDto);
-        User author = userService.getUserById(id);
-        ad.setAuthor(author);
+    public AdsDto updateAd(Integer id, CreateAdsDto createAdsDto) {
+        Ads ad = getAdById(id);
+        mapper.updateAds(createAdsDto, ad);
         return mapper.toDto(adsRepository.save(ad));
     }
 
-    public AdsDto getAdsInfo(int adsId) {
-        Ads ads = getAdsById(adsId);
-        AdsMapperImpl adsMapper = new AdsMapperImpl();
-        return adsMapper.toDto(ads);
+    public ResponseWrapperAdsDto getAdsMe(Integer userId) {
+        List<Ads> ads = adsRepository.findByAuthor_Id(userId);
+        return listMapper.toResponseWrapperAdsDto(ads);
     }
 
 }

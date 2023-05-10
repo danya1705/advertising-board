@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AdsRepository extends JpaRepository<Ads,Integer> {
     List<Ads> findByTitleContaining(String namePart);
+    List<Ads> findByAuthor_Id(Integer id);
 }
