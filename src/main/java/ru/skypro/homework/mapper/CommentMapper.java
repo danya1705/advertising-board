@@ -13,7 +13,8 @@ public interface CommentMapper {
 
     @Mapping(source = "commentId", target = "pk")
     @Mapping(source = "author.id", target = "author")
-    @Mapping(source = "author.image.url", target = "authorImage")
+    @Mapping(target = "authorImage",
+            expression = "java(\"/img/\" + java.nio.file.Path.of(comment.getAuthor().getImage().getFilePath()).getFileName().toString())")
     @Mapping(source = "author.firstName", target = "authorFirstName")
     CommentDto toDto(Comment comment);
 

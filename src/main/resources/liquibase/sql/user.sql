@@ -84,3 +84,6 @@ ALTER TABLE image ADD COLUMN IF NOT EXISTS url TEXT;
 --changeset dKarpov:5
 ALTER TABLE comment DROP CONSTRAINT comment_pkey;
 ALTER TABLE comment ADD PRIMARY KEY (comment_id);
+
+--changeset dKarpov:6
+ALTER TABLE image DROP COLUMN url;

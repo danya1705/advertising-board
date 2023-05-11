@@ -10,18 +10,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
 @Service
 public class ImageService {
 
     private final ImageRepository imageRepository;
-
-    @Value("${server.address}")
-    private String serverAddress;
-
-    @Value("${server.port}")
-    private String serverPort;
 
     @Value("${path.to.image.folder}")
     private String imageDir;
@@ -36,19 +28,11 @@ public class ImageService {
         Path filePath = Path.of(imageDir, imageFile.getOriginalFilename());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        try (
-                InputStream is = imageFile.getInputStream();
-                OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-                BufferedInputStream bis = new BufferedInputStream(is, 1024);
-                BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-        ) {
-            bis.transferTo(bos);
-        }
+        Files.write(filePath,imageFile.getBytes());
 
         image.setFilePath(filePath.toString());
         image.setFileSize(imageFile.getSize());
         image.setMediaType(imageFile.getContentType());
-        image.setUrl(serverAddress + ":" + serverPort + "/img/" + imageFile.getOriginalFilename());
 
         return imageRepository.save(image);
     }

@@ -16,10 +16,11 @@ public interface UserMapper {
     @Mapping(source = "user.lastName", target = "lastName")
     @Mapping(source = "user.phone", target = "phone")
     @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "user.image.url", target = "image")
+    @Mapping(target = "image",
+            expression = "java(\"/img/\" + java.nio.file.Path.of(user.getImage().getFilePath()).getFileName().toString())")
     UserDto toDto(User user);
 
-    @Mapping(source = "userDto.image", target = "user.image.url")
+    @Mapping(target = "user.image", ignore = true)
     void updateUser(UserDto userDto, @MappingTarget User user);
 
     @Mapping(source = "newPasswordDto.newPassword", target = "password")

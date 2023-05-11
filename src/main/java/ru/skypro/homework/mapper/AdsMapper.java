@@ -15,15 +15,17 @@ import ru.skypro.homework.entity.User;
 public interface AdsMapper {
 
     @Mapping(source = "author.id", target = "author")
-    @Mapping(source = "image.url", target = "image")
+    @Mapping(target = "image",
+            expression = "java(\"/img/\" + java.nio.file.Path.of(ad.getImage().getFilePath()).getFileName().toString())")
     AdsDto toDto(Ads ad);
 
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "author.lastName", target = "authorLastName")
-    @Mapping(source = "image.url", target = "image")
+    @Mapping(target = "image",
+            expression = "java(\"/img/\" + java.nio.file.Path.of(ad.getImage().getFilePath()).getFileName().toString())")
     @Mapping(source = "author.phone", target = "phone")
     @Mapping(source = "author.email", target = "email")
-    FullAdsDto toFullAdsDto(Ads ads);
+    FullAdsDto toFullAdsDto(Ads ad);
 
     Ads toAds(CreateAdsDto createAdsDto);
 

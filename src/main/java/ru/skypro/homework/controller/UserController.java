@@ -57,11 +57,7 @@ public class UserController {
     })
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser() {
-        if (userService.getUserInfo(1) != null) {
-            return ResponseEntity.ok(userService.getUserInfo(1));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(userService.getUserInfo(1));
     }
 
     @Operation(summary = "Обновить информацию об авторизованном пользователе", tags = "Пользователи")
@@ -86,7 +82,7 @@ public class UserController {
                     description = "Unauthorized")
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateUserImage(@RequestParam MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
         int id = 1;
         log.info("Updating image for user with id = " + id);
         userService.editUserImage(id, image);
