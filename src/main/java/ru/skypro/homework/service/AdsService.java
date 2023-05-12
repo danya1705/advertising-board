@@ -1,5 +1,7 @@
 package ru.skypro.homework.service;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
@@ -10,41 +12,29 @@ import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.dto.Role;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
+@Slf4j
+@AllArgsConstructor
 public class AdsService {
 
     private final AdsRepository adsRepository;
+    private final CommentRepository commentRepository;
     private final UserService userService;
     private final ImageService imageService;
     private final AdsMapper mapper;
     private final AdsListMapper listMapper;
-    private final Logger logger = Logger.getLogger("AdsServiceLogger");
-
-    public AdsService(
-            AdsRepository adsRepository,
-            UserService userService,
-            ImageService imageService,
-            AdsMapper mapper,
-            AdsListMapper listMapper) {
-        this.adsRepository = adsRepository;
-        this.userService = userService;
-        this.imageService = imageService;
-        this.mapper = mapper;
-        this.listMapper = listMapper;
-    }
 
     public Ads getAdById(Integer id) {
         return adsRepository.findById(id)
-                .orElseGet(() -> {
-                            logger.info("Ad with id=" + id + " noy found");
-                            return null;
-                        }
-                );
+                .orElseThrow(() -> new NoSuchElementException("Ad with id=" + id + " not found"));
     }
 
     public byte[] editAdImage(Integer adId, MultipartFile imageFile) throws IOException {
@@ -54,19 +44,19 @@ public class AdsService {
         return imageFile.getBytes();
     }
 
-    public AdsDto createAd(CreateAdsDto createAdsDto, MultipartFile imageFile) throws IOException {
+    public AdsDto createAd(CreateAdsDto createAdsDto, MultipartFile imageFile, String username) throws IOException {
         Ads ad = mapper.toAds(createAdsDto);
-        User author = userService.getUserById(1);
+        User author = userService.getUserByUsername(username);
         ad.setAuthor(author);
         ad.setImage(imageService.uploadImage(imageFile));
         return mapper.toDto(adsRepository.save(ad));
     }
 
-    public ResponseWrapperAdsDto getAdsByNamePart(String namePart) {
-        return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContaining(namePart));
+    public ResponseWrapperAdsDto getAdsByTitlePart(String titlePart) {
+        return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContaining(titlePart));
     }
 
-    public ResponseWrapperAdsDto getAdsAll(){
+    public ResponseWrapperAdsDto getAdsAll() {
         List<Ads> ads = adsRepository.findAll();
         return listMapper.toResponseWrapperAdsDto(ads);
     }
@@ -75,19 +65,31 @@ public class AdsService {
         return mapper.toFullAdsDto(getAdById(id));
     }
 
-    public void deleteAd(Integer id) {
+    public boolean deleteAd(Integer id, String username) {
+        User user = userService.getUserByUsername(username);
         Ads ad = getAdById(id);
-        adsRepository.delete(ad);
+        if (user.equals(ad.getAuthor()) || user.getRole() == Role.ADMIN) {
+            commentRepository.deleteAll(ad.getCommentsList());
+            adsRepository.delete(ad);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public AdsDto updateAd(Integer id, CreateAdsDto createAdsDto) {
+    public Optional<AdsDto> updateAd(Integer id, CreateAdsDto createAdsDto, String username) {
+        User user = userService.getUserByUsername(username);
         Ads ad = getAdById(id);
-        mapper.updateAds(createAdsDto, ad);
-        return mapper.toDto(adsRepository.save(ad));
+        if (user.equals(ad.getAuthor()) || user.getRole() == Role.ADMIN) {
+            mapper.updateAds(createAdsDto, ad);
+            return Optional.of(mapper.toDto(adsRepository.save(ad)));
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public ResponseWrapperAdsDto getAdsMe(Integer userId) {
-        List<Ads> ads = adsRepository.findByAuthor_Id(userId);
+    public ResponseWrapperAdsDto getAdsMe(String username) {
+        List<Ads> ads = adsRepository.findByAuthor_UserName(username);
         return listMapper.toResponseWrapperAdsDto(ads);
     }
 

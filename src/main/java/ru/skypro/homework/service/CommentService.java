@@ -1,88 +1,80 @@
 package ru.skypro.homework.service;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateCommentDto;
 import ru.skypro.homework.dto.ResponseWrapperCommentDto;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.CommentListMapper;
 import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
+@AllArgsConstructor
+@Slf4j
 public class CommentService {
-    private final UserRepository userRepository;
 
     private final CommentMapper commentMapper;
-    private final AdsRepository adsRepository;
+    private final AdsService adsService;
+    private final UserService userService;
     private final CommentRepository commentRepository;
-
     private final CommentListMapper commentListMapper;
-    private final Logger logger = Logger.getLogger("CommentServiceLogger");
-
-    public CommentService(UserRepository userRepository, CommentMapper commentMapper, AdsRepository adsRepository, CommentRepository commentRepository, CommentListMapper commentListMapper) {
-        this.userRepository = userRepository;
-        this.commentMapper = commentMapper;
-        this.adsRepository = adsRepository;
-        this.commentRepository = commentRepository;
-        this.commentListMapper = commentListMapper;
-    }
-
 
     public ResponseWrapperCommentDto getCommentsByAdId(Integer id) {
-        Optional<Ads> ad = adsRepository.findById(id);
-        if (ad.isPresent()) {
-            return commentListMapper.toResponseWrapperCommentDto(ad.get());
-        } else {
-            logger.info("Ad with id=" + id + " not found");
-            return null;
-        }
+        return commentListMapper.toResponseWrapperCommentDto(adsService.getAdById(id));
     }
 
-    public CommentDto addComment(Integer id, CreateCommentDto createCommentDto) {
+    public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, String username) {
+
+        User author = userService.getUserByUsername(username);
+        Ads ad = adsService.getAdById(id);
 
         Comment comment = commentMapper.toComment(createCommentDto);
-        Integer userId = 1;
-
-        Optional<Ads> ad = adsRepository.findById(id);
-        if (ad.isEmpty()) {
-            logger.info("Ad with id=" + id + " not found");
-            return null;
-        }
-
-        Optional<User> author = userRepository.findById(userId);
-        if (author.isEmpty()) {
-            logger.info("User with id=" + userId + " not found");
-            return null;
-        }
-
-        comment.setAd(ad.get());
-        comment.setAuthor(author.get());
+        comment.setAd(ad);
+        comment.setAuthor(author);
         comment.setCreatedAt(System.currentTimeMillis());
         commentRepository.save(comment);
+
         return commentMapper.toDto(comment);
     }
 
-    public void deleteComment(Integer commentId) {
-        commentRepository.deleteById(commentId);
+    public boolean deleteComment(Integer commentId, String username) {
+
+        User user = userService.getUserByUsername(username);
+        Comment comment = getCommentById(commentId);
+
+        if (user.equals(comment.getAuthor()) || user.getRole() == Role.ADMIN) {
+            commentRepository.deleteById(commentId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public CommentDto updateComment(Integer commentId, CommentDto commentDto) {
-        Optional<Comment> comment = commentRepository.findById(commentId);
-        if (comment.isPresent()) {
-            commentMapper.updateComment(commentDto, comment.get());
-            return commentMapper.toDto(commentRepository.save(comment.get()));
+    public Optional<CommentDto> updateComment(Integer commentId, CommentDto commentDto, String username) {
+
+        User user = userService.getUserByUsername(username);
+        Comment comment = getCommentById(commentId);
+
+        if (user.equals(comment.getAuthor()) || user.getRole() == Role.ADMIN) {
+            commentMapper.updateComment(commentDto, comment);
+            return Optional.of(commentMapper.toDto(commentRepository.save(comment)));
         } else {
-            logger.info("Comment with id=" + commentId + " not found");
-            return null;
+            return Optional.empty();
         }
+    }
+
+    public Comment getCommentById(Integer id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Comment with id=" + id + " not found"));
     }
 
 
