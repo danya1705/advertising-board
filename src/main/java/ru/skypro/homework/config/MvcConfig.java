@@ -1,4 +1,4 @@
-package ru.skypro.homework;
+package ru.skypro.homework.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

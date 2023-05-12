@@ -4,7 +4,9 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
@@ -25,4 +27,15 @@ public interface UserMapper {
 
     @Mapping(source = "newPasswordDto.newPassword", target = "password")
     void updateUserPassword(NewPasswordDto newPasswordDto, @MappingTarget User user);
+
+    @Mapping(source = "username", target = "userName")
+    User toUser(UserDetails userDetails);
+
+    @Mapping(source = "username", target = "userName")
+    void updateUser(UserDetails userDetails, @MappingTarget User user);
+
+    @Mapping(source = "username", target = "userName")
+    @Mapping(source = "username", target = "email")
+    User toUser(RegisterReqDto registerReqDto);
+
 }
