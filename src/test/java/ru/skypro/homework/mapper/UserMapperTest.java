@@ -27,8 +27,6 @@ public class UserMapperTest {
     public static final String EMAIL = "Name@mail.ru";
     public static final String WRONG_EMAIL = "WrongName@mail.ru";
     public static final String IMAGE_URL = "filePath";
-    public static final String WRONG_IMAGE_URL = "wrongFilePath";
-
 
     @InjectMocks
     private UserMapperImpl userMapper;
@@ -37,7 +35,6 @@ public class UserMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
-        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setId(USER_ID);
@@ -63,9 +60,7 @@ public class UserMapperTest {
     @Test
     void updateUserTest() {
         Image wrongImage = new Image();
-        wrongImage.setUrl(WRONG_IMAGE_URL);
         Image image = new Image();
-        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setId(WRONG_USER_ID);
@@ -83,7 +78,6 @@ public class UserMapperTest {
         userDto.setLastName(LAST_NAME);
         userDto.setPhone(PHONE);
         userDto.setEmail(EMAIL);
-        userDto.setImage(image.getUrl());
 
         userMapper.updateUser(userDto, user);
 
@@ -93,7 +87,6 @@ public class UserMapperTest {
         Assertions.assertThat(user.getLastName()).isEqualTo(LAST_NAME);
         Assertions.assertThat(user.getPhone()).isEqualTo(PHONE);
         Assertions.assertThat(user.getEmail()).isEqualTo(EMAIL);
-        Assertions.assertThat(user.getImage().getUrl()).isEqualTo(IMAGE_URL);
     }
 
     @Test

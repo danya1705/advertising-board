@@ -19,8 +19,6 @@ import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAdsDto;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.UserService;
-
 
 import java.io.IOException;
 
@@ -106,7 +104,7 @@ public class AdsController {
                 .orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
 
-    @Operation(summary = "Получить объявление авторизованного пользователя", tags = "Объявления")
+    @Operation(summary = "Получить объявления авторизованного пользователя", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",

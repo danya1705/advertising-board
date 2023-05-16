@@ -31,7 +31,6 @@ class AdsMapperTest {
     void toAdsDtoTest() {
 
         Image image = new Image();
-        image.setUrl(FILE_URL);
 
         User user = new User();
         user.setId(USER_ID);
@@ -58,7 +57,6 @@ class AdsMapperTest {
     void toFullAdsDtoTest() {
 
         Image image = new Image();
-        image.setUrl(FILE_URL);
 
         User user = new User();
         user.setId(USER_ID);

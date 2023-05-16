@@ -53,7 +53,7 @@ public class AdsService {
     }
 
     public ResponseWrapperAdsDto getAdsByTitlePart(String titlePart) {
-        return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContaining(titlePart));
+        return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContainingIgnoreCase(titlePart));
     }
 
     public ResponseWrapperAdsDto getAdsAll() {

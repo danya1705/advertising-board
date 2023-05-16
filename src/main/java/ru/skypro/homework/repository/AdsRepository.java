@@ -6,7 +6,6 @@ import ru.skypro.homework.entity.Ads;
 import java.util.List;
 
 public interface AdsRepository extends JpaRepository<Ads,Integer> {
-    List<Ads> findByTitleContaining(String namePart);
-    List<Ads> findByAuthor_Id(Integer id);
+    List<Ads> findByTitleContainingIgnoreCase(String namePart);
     List<Ads> findByAuthor_UserName(String username);
 }

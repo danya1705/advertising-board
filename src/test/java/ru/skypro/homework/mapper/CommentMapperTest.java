@@ -32,7 +32,6 @@ class CommentMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
-        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setId(USER_ID);
@@ -62,7 +61,6 @@ class CommentMapperTest {
     void updateCommentTest() {
 
         Image image = new Image();
-        image.setUrl(IMAGE_URL);
 
         User user = new User();
         user.setFirstName(USER_FIRST_NAME);
