@@ -15,9 +15,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/users")
@@ -27,6 +34,7 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final ImageRepository imageRepository;
 
     @Operation(summary = "Обновление пароля", tags = "Пользователи")
     @ApiResponses(value = {
@@ -92,4 +100,17 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = "/image/{id}")
+    public void downloadImage(@PathVariable int id, HttpServletResponse response) throws IOException{
+        Image image = imageRepository.findById(id).get();
+        Path path = Path.of(image.getFilePath());
+
+        try(InputStream is = Files.newInputStream(path);
+            OutputStream os = response.getOutputStream()){
+            response.setStatus(200);
+            response.setContentType(image.getMediaType());
+            response.setContentLength((int) image.getFileSize());
+            is.transferTo(os);
+        }
+    }
 }

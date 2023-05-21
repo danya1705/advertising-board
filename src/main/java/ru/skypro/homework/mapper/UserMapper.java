@@ -10,8 +10,6 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 
-import java.nio.file.Path;
-
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
 
@@ -38,7 +36,7 @@ public interface UserMapper {
 
         Image image = user.getImage();
         if (image != null) {
-            userDto.setImage("/img/" + Path.of(image.getFilePath()).getFileName().toString());
+            userDto.setImage("/users/image/" + image.getId());
         } else {
             userDto.setImage(null);
         }
@@ -48,6 +46,7 @@ public interface UserMapper {
 
     @Mapping(target = "user.image", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "email", ignore = true)
     void updateUser(UserDto userDto, @MappingTarget User user);
 
     @Mapping(source = "newPasswordDto.newPassword", target = "password")
