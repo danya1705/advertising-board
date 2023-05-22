@@ -3,10 +3,12 @@ package ru.skypro.homework.security;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.entity.User;
 
 import java.util.Collection;
+import java.util.Set;
 
 @AllArgsConstructor
 @Builder
@@ -16,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Set.of(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
