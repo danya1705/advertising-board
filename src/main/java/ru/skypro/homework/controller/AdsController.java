@@ -82,8 +82,9 @@ public class AdsController {
     public ResponseEntity<?> deleteAd(@PathVariable Integer id, Authentication authentication) {
         if (adsService.deleteAd(id, authentication.getName())) {
             return ResponseEntity.ok().build();
-        } else
+        } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @Operation(summary = "Обновить информацию об объявлении", tags = "Объявления")

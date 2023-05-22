@@ -13,7 +13,6 @@ import ru.skypro.homework.mapper.UserMapperImpl;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -24,11 +23,6 @@ public class UserService {
     private final ImageService imageService;
     private final UserMapperImpl userMapper;
     private final PasswordEncoder encoder;
-
-    public User getUserById(Integer id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User with id=" + id + " not found"));
-    }
 
     public UserDto getUserInfo(String username) {
         return userMapper.toDto(getUserByUsername(username));

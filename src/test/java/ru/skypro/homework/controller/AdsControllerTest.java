@@ -425,7 +425,7 @@ class AdsControllerTest {
     }
 
     @Test
-    void UnauthenticatedTests() throws Exception {
+    void unauthenticatedTests() throws Exception {
 
         mockMvc.perform(multipart(HttpMethod.POST, "/ads")).andExpect(status().isUnauthorized());
         mockMvc.perform(MockMvcRequestBuilders.get("/ads/{id}", PK)).andExpect(status().isUnauthorized());

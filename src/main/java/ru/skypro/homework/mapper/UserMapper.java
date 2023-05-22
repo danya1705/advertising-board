@@ -13,13 +13,6 @@ import ru.skypro.homework.entity.User;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
 
-    @Mapping(source = "user.id", target = "id")
-    @Mapping(source = "user.firstName", target = "firstName")
-    @Mapping(source = "user.lastName", target = "lastName")
-    @Mapping(source = "user.phone", target = "phone")
-    @Mapping(source = "user.email", target = "email")
-    @Mapping(target = "image",
-            expression = "java(\"/img/\" + java.nio.file.Path.of(user.getImage().getFilePath()).getFileName().toString())")
     default UserDto toDto(User user) {
 
         if ( user == null ) {
@@ -27,7 +20,6 @@ public interface UserMapper {
         }
 
         UserDto userDto = new UserDto();
-
         userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
@@ -36,7 +28,7 @@ public interface UserMapper {
 
         Image image = user.getImage();
         if (image != null) {
-            userDto.setImage("/users/image/" + image.getId());
+            userDto.setImage("/image/" + image.getId());
         } else {
             userDto.setImage(null);
         }

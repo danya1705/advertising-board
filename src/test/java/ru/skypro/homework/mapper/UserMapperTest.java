@@ -13,9 +13,7 @@ import ru.skypro.homework.entity.User;
 @ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
     public static final int USER_ID = 1;
-    public static final int WRONG_USER_ID = 2;
     public static final String USER_NAME = "CorrectFullName";
-    public static final String WRONG_USER_NAME = "WrongFullName";
     public static final String USER_PASSWORD = "1234";
     public static final String WRONG_USER_PASSWORD = "1111";
     public static final String FIRST_NAME = "FirstName";
@@ -25,8 +23,7 @@ public class UserMapperTest {
     public static final String PHONE = "11111111111";
     public static final String WRONG_PHONE = "22222222222";
     public static final String EMAIL = "Name@mail.ru";
-    public static final String WRONG_EMAIL = "WrongName@mail.ru";
-    public static final String IMAGE_URL = "filePath";
+    public static final int IMAGE_ID = 11111;
 
     @InjectMocks
     private UserMapperImpl userMapper;
@@ -35,6 +32,7 @@ public class UserMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
+        image.setId(IMAGE_ID);
 
         User user = new User();
         user.setId(USER_ID);
@@ -54,30 +52,27 @@ public class UserMapperTest {
         Assertions.assertThat(dto.getLastName()).isEqualTo(LAST_NAME);
         Assertions.assertThat(dto.getPhone()).isEqualTo(PHONE);
         Assertions.assertThat(dto.getEmail()).isEqualTo(EMAIL);
-        Assertions.assertThat(dto.getImage()).isEqualTo(IMAGE_URL);
+        Assertions.assertThat(dto.getImage()).isEqualTo("/image/" + IMAGE_ID);
     }
 
     @Test
     void updateUserTest() {
-        Image wrongImage = new Image();
+
         Image image = new Image();
+        image.setId(IMAGE_ID);
 
         User user = new User();
-        user.setId(WRONG_USER_ID);
-        user.setUserName(WRONG_USER_NAME);
-        user.setPassword(WRONG_USER_PASSWORD);
+        user.setId(USER_ID);
         user.setFirstName(WRONG_FIRST_NAME);
         user.setLastName(WRONG_LAST_NAME);
         user.setPhone(WRONG_PHONE);
-        user.setEmail(WRONG_EMAIL);
-        user.setImage(wrongImage);
+        user.setEmail(EMAIL);
+        user.setImage(image);
 
         UserDto userDto = new UserDto();
-        userDto.setId(USER_ID);
         userDto.setFirstName(FIRST_NAME);
         userDto.setLastName(LAST_NAME);
         userDto.setPhone(PHONE);
-        userDto.setEmail(EMAIL);
 
         userMapper.updateUser(userDto, user);
 
@@ -87,6 +82,8 @@ public class UserMapperTest {
         Assertions.assertThat(user.getLastName()).isEqualTo(LAST_NAME);
         Assertions.assertThat(user.getPhone()).isEqualTo(PHONE);
         Assertions.assertThat(user.getEmail()).isEqualTo(EMAIL);
+        Assertions.assertThat(user.getImage()).isEqualTo(image);
+
     }
 
     @Test

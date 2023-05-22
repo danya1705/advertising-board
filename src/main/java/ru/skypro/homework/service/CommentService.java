@@ -41,7 +41,7 @@ public class CommentService {
         comment.setAd(ad);
         comment.setAuthor(author);
         comment.setCreatedAt(System.currentTimeMillis());
-        commentRepository.save(comment);
+        comment = commentRepository.save(comment);
 
         return commentMapper.toDto(comment);
     }

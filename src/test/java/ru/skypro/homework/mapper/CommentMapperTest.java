@@ -23,8 +23,9 @@ class CommentMapperTest {
     public static final int WRONG_USER_ID = 2;
     public static final String USER_FIRST_NAME = "firstName";
     public static final String WRONG_USER_FIRST_NAME = "wrongFirstName";
-    public static final String IMAGE_URL = "Some URL";
     public static final String WRONG_IMAGE_URL = "Some wrong URL";
+    public static final String IMAGE_FILEPATH = "images\\jpg.png";
+    public static final String IMAGE_URL = "/img/jpg.png";
 
     private final CommentMapperImpl commentMapper = new CommentMapperImpl();
 
@@ -32,6 +33,7 @@ class CommentMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
+        image.setFilePath(IMAGE_FILEPATH);
 
         User user = new User();
         user.setId(USER_ID);

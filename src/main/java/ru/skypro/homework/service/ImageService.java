@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.repository.ImageRepository;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
