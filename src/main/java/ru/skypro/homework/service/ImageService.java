@@ -22,13 +22,19 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
+    /**
+     * Загрузка изображения
+     *
+     * @param imageFile файл изображения
+     * @return Image
+     */
     public Image uploadImage(MultipartFile imageFile) throws IOException {
 
         Image image = new Image();
         Path filePath = Path.of(imageDir, imageFile.getOriginalFilename());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        Files.write(filePath,imageFile.getBytes());
+        Files.write(filePath, imageFile.getBytes());
 
         image.setFilePath(filePath.toString());
         image.setFileSize(imageFile.getSize());

@@ -17,6 +17,13 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    /**
+     * Авторизация пользователя
+     *
+     * @param userName логин пользователя
+     * @param password пароль пользователя
+     * @return boolean
+     */
     @Override
     public boolean login(String userName, String password) {
         return userRepository.findByUserName(userName)
@@ -24,6 +31,13 @@ public class AuthServiceImpl implements AuthService {
                 .orElse(false);
     }
 
+    /**
+     * Внесение нового пользователя в БД при регистрации
+     *
+     * @param registerReqDto DTO регистрации пользователя
+     * @param role           роль пользователя
+     * @return boolean
+     */
     @Override
     public boolean register(RegisterReqDto registerReqDto, Role role) {
 

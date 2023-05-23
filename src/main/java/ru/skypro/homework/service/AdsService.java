@@ -32,11 +32,24 @@ public class AdsService {
     private final AdsMapper mapper;
     private final AdsListMapper listMapper;
 
+    /**
+     * Получение объявления по id
+     *
+     * @param id ID объявления
+     * @return Ads
+     */
     public Ads getAdById(Integer id) {
         return adsRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Ad with id=" + id + " not found"));
     }
 
+    /**
+     * Изменение изображения объявления
+     *
+     * @param adId      ID объявления
+     * @param imageFile изображение
+     * @return byte[]
+     */
     public byte[] editAdImage(Integer adId, MultipartFile imageFile) throws IOException {
         Ads ad = getAdById(adId);
         ad.setImage(imageService.uploadImage(imageFile));
@@ -44,6 +57,14 @@ public class AdsService {
         return imageFile.getBytes();
     }
 
+    /**
+     * Создание объявления
+     *
+     * @param createAdsDto DTO для создания объявления
+     * @param imageFile    изображение
+     * @param username     username пользователя
+     * @return AdsDto
+     */
     public AdsDto createAd(CreateAdsDto createAdsDto, MultipartFile imageFile, String username) throws IOException {
         Ads ad = mapper.toAds(createAdsDto);
         User author = userService.getUserByUsername(username);
@@ -52,10 +73,21 @@ public class AdsService {
         return mapper.toDto(adsRepository.save(ad));
     }
 
+    /**
+     * Поиск объявления по части имени
+     *
+     * @param titlePart часть названия для поиска
+     * @return ResponseWrapperAdsDto
+     */
     public ResponseWrapperAdsDto getAdsByTitlePart(String titlePart) {
         return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContainingIgnoreCase(titlePart));
     }
 
+    /**
+     * Получение списка всех объявлений
+     *
+     * @return ResponseWrapperAdsDto
+     */
     public ResponseWrapperAdsDto getAdsAll() {
         List<Ads> ads = adsRepository.findAll();
         return listMapper.toResponseWrapperAdsDto(ads);
@@ -65,6 +97,13 @@ public class AdsService {
         return mapper.toFullAdsDto(getAdById(id));
     }
 
+    /**
+     * Удаление объявления
+     *
+     * @param id       ID объявления
+     * @param username username пользователя
+     * @return boolean
+     */
     public boolean deleteAd(Integer id, String username) {
         User user = userService.getUserByUsername(username);
         Ads ad = getAdById(id);
@@ -77,6 +116,14 @@ public class AdsService {
         }
     }
 
+    /**
+     * Обновление объявления
+     *
+     * @param id           ID объявления
+     * @param createAdsDto DTO для обновления
+     * @param username     username пользователя
+     * @return Optional
+     */
     public Optional<AdsDto> updateAd(Integer id, CreateAdsDto createAdsDto, String username) {
         User user = userService.getUserByUsername(username);
         Ads ad = getAdById(id);
@@ -88,6 +135,12 @@ public class AdsService {
         }
     }
 
+    /**
+     * Получение списка объявлений
+     *
+     * @param username username пользователя
+     * @return ResponseWrapperAdsDto
+     */
     public ResponseWrapperAdsDto getAdsMe(String username) {
         List<Ads> ads = adsRepository.findByAuthor_UserName(username);
         return listMapper.toResponseWrapperAdsDto(ads);

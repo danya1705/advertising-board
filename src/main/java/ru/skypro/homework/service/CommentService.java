@@ -28,10 +28,24 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentListMapper commentListMapper;
 
+    /**
+     * Получение списка комментариев по ID объявления
+     *
+     * @param id ID объявления
+     * @return ResponseWrapperCommentDto
+     */
     public ResponseWrapperCommentDto getCommentsByAdId(Integer id) {
         return commentListMapper.toResponseWrapperCommentDto(adsService.getAdById(id));
     }
 
+    /**
+     * Добавление комментария
+     *
+     * @param id               ID объявления
+     * @param createCommentDto DTO для создания комментария
+     * @param username         Username пользователя
+     * @return CommentDto
+     */
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, String username) {
 
         User author = userService.getUserByUsername(username);
@@ -46,6 +60,13 @@ public class CommentService {
         return commentMapper.toDto(comment);
     }
 
+    /**
+     * Удаление комментария
+     *
+     * @param commentId ID комментария
+     * @param username  Username пользователя
+     * @return boolean
+     */
     public boolean deleteComment(Integer commentId, String username) {
 
         User user = userService.getUserByUsername(username);
@@ -59,6 +80,14 @@ public class CommentService {
         }
     }
 
+    /**
+     * Изменение комментария
+     *
+     * @param commentId  ID комментария
+     * @param commentDto DTO комментария
+     * @param username   Username пользователя
+     * @return Optional
+     */
     public Optional<CommentDto> updateComment(Integer commentId, CommentDto commentDto, String username) {
 
         User user = userService.getUserByUsername(username);
@@ -72,6 +101,12 @@ public class CommentService {
         }
     }
 
+    /**
+     * Получение комментария из БД
+     *
+     * @param id ID комментария
+     * @return Comment
+     */
     public Comment getCommentById(Integer id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Comment with id=" + id + " not found"));

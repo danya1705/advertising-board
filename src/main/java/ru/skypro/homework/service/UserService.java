@@ -24,16 +24,36 @@ public class UserService {
     private final UserMapperImpl userMapper;
     private final PasswordEncoder encoder;
 
+    /**
+     * Получение информации о пользователе в виде DTO
+     *
+     * @param username Username пользователя
+     */
     public UserDto getUserInfo(String username) {
         return userMapper.toDto(getUserByUsername(username));
     }
 
+    /**
+     * Изменение данных о пользователе
+     *
+     * @param userDto  DTO с новыми данными о пользователе, которые будут
+     *                 записаны взамен старых данных
+     * @param username Username пользователя
+     * @return UserDto
+     */
     public UserDto updateUser(UserDto userDto, String username) {
         User user = getUserByUsername(username);
         userMapper.updateUser(userDto, user);
         return userMapper.toDto(userRepository.save(user));
     }
 
+    /**
+     * Изменение пароля пользователя
+     *
+     * @param newPasswordDto DTO с новым паролем пользователя
+     * @param username       Username пользователя
+     * @return boolean
+     */
     public boolean editUserPassword(NewPasswordDto newPasswordDto, String username) {
         User user = getUserByUsername(username);
         if (encoder.matches(newPasswordDto.getCurrentPassword(), user.getPassword())) {
@@ -46,12 +66,24 @@ public class UserService {
         }
     }
 
+    /**
+     * Изменение изображения пользователя
+     *
+     * @param imageFile файл изображения
+     * @param username  username пользователя
+     */
     public void editUserImage(MultipartFile imageFile, String username) throws IOException {
         User user = getUserByUsername(username);
         user.setImage(imageService.uploadImage(imageFile));
         userRepository.save(user);
     }
 
+    /**
+     * Получение пользователя из БД по username
+     *
+     * @param username Username пользователя
+     * @return User
+     */
     public User getUserByUsername(String username) {
         return userRepository.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));

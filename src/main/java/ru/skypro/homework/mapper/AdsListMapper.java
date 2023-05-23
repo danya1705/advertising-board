@@ -13,7 +13,11 @@ import java.util.List;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AdsListMapper {
     List<AdsDto> toDto(List<Ads> adsList);
-
+    /**
+     * Создание оболочки ответа со списком объявлений одного пользователя
+     *
+     * @param adsList Список объявлений
+     */
     default ResponseWrapperAdsDto toResponseWrapperAdsDto(List<Ads> adsList) {
         ResponseWrapperAdsDto dto = new ResponseWrapperAdsDto();
         dto.setCount(adsList.size());

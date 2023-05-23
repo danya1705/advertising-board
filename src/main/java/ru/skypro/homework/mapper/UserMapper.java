@@ -12,10 +12,15 @@ import ru.skypro.homework.entity.User;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
-
+    /**
+     * Создание UserDto по модели User
+     *
+     * @param user пользователь
+     * @return UserDto
+     */
     default UserDto toDto(User user) {
 
-        if ( user == null ) {
+        if (user == null) {
             return null;
         }
 
@@ -36,14 +41,31 @@ public interface UserMapper {
         return userDto;
     }
 
+    /**
+     * Изменение данных о пользователе
+     *
+     * @param userDto ID объявления
+     * @param user    пользователь
+     */
     @Mapping(target = "user.image", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
     void updateUser(UserDto userDto, @MappingTarget User user);
 
+    /**
+     * Изменение пароля
+     *
+     * @param newPasswordDto Dto с обновленным паролем
+     * @param user           пользователь
+     */
     @Mapping(source = "newPasswordDto.newPassword", target = "password")
     void updateUserPassword(NewPasswordDto newPasswordDto, @MappingTarget User user);
 
+    /**
+     * Соотнесение данных из Dto в сущность пользователя
+     *
+     * @param registerReqDto Dto с данными зарегестрированного пользователя
+     */
     @Mapping(source = "username", target = "userName")
     @Mapping(source = "username", target = "email")
     User toUser(RegisterReqDto registerReqDto);
