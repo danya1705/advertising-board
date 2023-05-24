@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAdsDto;
 import ru.skypro.homework.entity.Ads;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.AdsRepository;
@@ -52,8 +53,10 @@ public class AdsService {
      */
     public byte[] editAdImage(Integer adId, MultipartFile imageFile) throws IOException {
         Ads ad = getAdById(adId);
+        Image oldImage = ad.getImage();
         ad.setImage(imageService.uploadImage(imageFile));
         adsRepository.save(ad);
+        imageService.deleteImage(oldImage);
         return imageFile.getBytes();
     }
 
@@ -104,12 +107,14 @@ public class AdsService {
      * @param username username пользователя
      * @return boolean
      */
-    public boolean deleteAd(Integer id, String username) {
+    public boolean deleteAd(Integer id, String username) throws IOException {
         User user = userService.getUserByUsername(username);
         Ads ad = getAdById(id);
         if (user.equals(ad.getAuthor()) || user.getRole() == Role.ADMIN) {
+            Image image = ad.getImage();
             commentRepository.deleteAll(ad.getCommentsList());
             adsRepository.delete(ad);
+            imageService.deleteImage(image);
             return true;
         } else {
             return false;

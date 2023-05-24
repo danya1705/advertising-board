@@ -9,6 +9,7 @@ import ru.skypro.homework.repository.ImageRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 
 @Service
 public class ImageService {
@@ -31,7 +32,7 @@ public class ImageService {
     public Image uploadImage(MultipartFile imageFile) throws IOException {
 
         Image image = new Image();
-        Path filePath = Path.of(imageDir, imageFile.getOriginalFilename());
+        Path filePath = Path.of(imageDir, UUID.randomUUID().toString());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         Files.write(filePath, imageFile.getBytes());
@@ -41,5 +42,14 @@ public class ImageService {
         image.setMediaType(imageFile.getContentType());
 
         return imageRepository.save(image);
+    }
+
+    public void deleteImage(Image image) throws IOException {
+
+        if (image != null) {
+            Path filePath = Path.of(image.getFilePath());
+            Files.deleteIfExists(filePath);
+            imageRepository.delete(image);
+        }
     }
 }

@@ -79,7 +79,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content()})
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAd(@PathVariable Integer id, Authentication authentication) {
+    public ResponseEntity<?> deleteAd(@PathVariable Integer id, Authentication authentication) throws IOException {
         if (adsService.deleteAd(id, authentication.getName())) {
             return ResponseEntity.ok().build();
         } else {

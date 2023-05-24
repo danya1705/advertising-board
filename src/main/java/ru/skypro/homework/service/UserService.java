@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.UserMapperImpl;
 import ru.skypro.homework.repository.UserRepository;
@@ -74,8 +75,10 @@ public class UserService {
      */
     public void editUserImage(MultipartFile imageFile, String username) throws IOException {
         User user = getUserByUsername(username);
+        Image oldImage = user.getImage();
         user.setImage(imageService.uploadImage(imageFile));
         userRepository.save(user);
+        imageService.deleteImage(oldImage);
     }
 
     /**
