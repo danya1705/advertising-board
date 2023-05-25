@@ -51,8 +51,6 @@ class AdsControllerTest {
     public static final Integer USER_ID = 123;
     public static final Integer WRONG_USER_ID = 1234;
     public static final Integer ADMIN_ID = 321;
-    public static final String IMAGE_URL = "/img/jpg.png";
-    public static final String IMAGE_FILEPATH = "images\\jpg.png";
     public static final String USER_FIRSTNAME = "User firstname";
     public static final String USER_LASTNAME = "User lastname";
     public static final String USER_EMAIL = "User email";
@@ -64,6 +62,7 @@ class AdsControllerTest {
     public static final String TEST_IMAGE_FILENAME = "jpg.png";
     public static final String SECOND_TITLE = "Second title";
     public static final String THIRD_TITLE = "Third title";
+    public static final int IMAGE_ID = 1111;
 
     @Autowired
     private MockMvc mockMvc;
@@ -87,7 +86,7 @@ class AdsControllerTest {
         user.setId(USER_ID);
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         Ads firstAd = new Ads();
         firstAd.setPk(PK);
@@ -135,21 +134,19 @@ class AdsControllerTest {
         MockPart propertiesPart = new MockPart("properties", properties);
         propertiesPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        Image image = new Image();
-        image.setFilePath("\\images\\" + TEST_IMAGE_FILENAME);
-        image.setFileSize(imageFile.length);
-        image.setMediaType(MediaType.IMAGE_PNG_VALUE);
-
-        Ads ad = new Ads();
-        ad.setAuthor(user);
-        ad.setTitle(TITLE);
-        ad.setDescription(DESCRIPTION);
-        ad.setPrice(PRICE);
-        ad.setImage(image);
-
         when(userRepository.findByUserName(eq(AUTH_NAME))).thenReturn(Optional.of(user));
-        when(adsRepository.save(eq(ad))).thenReturn(addPkToAd(ad, PK));
-        when(imageRepository.save(eq(image))).thenReturn(image);
+        when(adsRepository.save(any(Ads.class)))
+                .thenAnswer(input -> {
+                    Ads savedAd = input.getArgument(0);
+                    savedAd.setPk(PK);
+                    return savedAd;
+                });
+        when(imageRepository.save(any(Image.class)))
+                .thenAnswer(input -> {
+                    Image savedImage = input.getArgument(0);
+                    savedImage.setId(IMAGE_ID);
+                    return savedImage;
+                });
 
         mockMvc.perform(multipart(HttpMethod.POST, "/ads")
                         .part(imagePart)
@@ -158,7 +155,7 @@ class AdsControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.author").value(USER_ID))
                 .andExpect(jsonPath("$.title").value(TITLE))
-                .andExpect(jsonPath("$.image").value(IMAGE_URL))
+                .andExpect(jsonPath("$.image").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.price").value(PRICE))
                 .andExpect(jsonPath("$.pk").value(PK));
     }
@@ -175,7 +172,7 @@ class AdsControllerTest {
         user.setPhone(USER_PHONE);
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         Ads ad = new Ads();
         ad.setPk(PK);
@@ -195,7 +192,7 @@ class AdsControllerTest {
                 .andExpect(jsonPath("$.authorLastName").value(USER_LASTNAME))
                 .andExpect(jsonPath("$.description").value(DESCRIPTION))
                 .andExpect(jsonPath("$.email").value(USER_EMAIL))
-                .andExpect(jsonPath("$.image").value(IMAGE_URL))
+                .andExpect(jsonPath("$.image").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.phone").value(USER_PHONE))
                 .andExpect(jsonPath("$.price").value(PRICE))
                 .andExpect(jsonPath("$.title").value(TITLE));
@@ -261,7 +258,7 @@ class AdsControllerTest {
         admin.setRole(Role.ADMIN);
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         Ads ad = new Ads();
         ad.setPk(PK);
@@ -291,7 +288,7 @@ class AdsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author").value(USER_ID))
-                .andExpect(jsonPath("$.image").value(IMAGE_URL))
+                .andExpect(jsonPath("$.image").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.pk").value(PK))
                 .andExpect(jsonPath("$.price").value(PRICE))
                 .andExpect(jsonPath("$.title").value(TITLE));
@@ -310,7 +307,7 @@ class AdsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author").value(USER_ID))
-                .andExpect(jsonPath("$.image").value(IMAGE_URL))
+                .andExpect(jsonPath("$.image").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.pk").value(PK))
                 .andExpect(jsonPath("$.price").value(PRICE))
                 .andExpect(jsonPath("$.title").value(TITLE));
@@ -393,7 +390,7 @@ class AdsControllerTest {
         user.setId(USER_ID);
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         Ads firstAd = new Ads();
         firstAd.setPk(PK);
@@ -436,16 +433,4 @@ class AdsControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/ads/title/{titlePart}", "title"))
                 .andExpect(status().isUnauthorized());
     }
-
-    private Ads addPkToAd(Ads ad, Integer pk) {
-        Ads newAd = new Ads();
-        newAd.setPk(pk);
-        newAd.setAuthor(ad.getAuthor());
-        newAd.setTitle(ad.getTitle());
-        newAd.setDescription(ad.getDescription());
-        newAd.setPrice(ad.getPrice());
-        newAd.setImage(ad.getImage());
-        return newAd;
-    }
-
 }

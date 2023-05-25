@@ -44,7 +44,6 @@ class CommentControllerTest {
     public static final int USER_ID = 123;
     public static final int WRONG_USER_ID = 321;
     public static final String IMAGE_FILEPATH = "images\\jpg.png";
-    public static final String IMAGE_URL = "/img/jpg.png";
     public static final String WRONG_IMAGE_URL = "/img/wrong.png";
     public static final String TEXT = "Some text";
     public static final String NEW_TEXT = "Some new text";
@@ -55,6 +54,7 @@ class CommentControllerTest {
     public static final String ADMIN_USERNAME = "Admin";
     public static final long CREATED_AT = 123456789;
     public static final long WRONG_CREATED_AT = 987654321;
+    public static final int IMAGE_ID = 1111;
 
     @Autowired
     private MockMvc mockMvc;
@@ -115,7 +115,7 @@ class CommentControllerTest {
         ad.setPk(AD_ID);
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         User author = new User();
         author.setId(USER_ID);
@@ -141,7 +141,7 @@ class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.author").value(USER_ID))
-                .andExpect(jsonPath("$.authorImage").value(IMAGE_URL))
+                .andExpect(jsonPath("$.authorImage").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.authorFirstName").value(USER_FIRSTNAME))
                 .andExpect(jsonPath("$.pk").value(COMMENT_ID))
                 .andExpect(jsonPath("$.text").value(TEXT));
@@ -190,7 +190,7 @@ class CommentControllerTest {
     void updateCommentTest() throws Exception {
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         User user = new User();
         user.setUserName(USERNAME);
@@ -235,7 +235,7 @@ class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.author").value(USER_ID))
-                .andExpect(jsonPath("$.authorImage").value(IMAGE_URL))
+                .andExpect(jsonPath("$.authorImage").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.authorFirstName").value(USER_FIRSTNAME))
                 .andExpect(jsonPath("$.createdAt").value(CREATED_AT))
                 .andExpect(jsonPath("$.pk").value(COMMENT_ID))
@@ -256,7 +256,7 @@ class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.author").value(USER_ID))
-                .andExpect(jsonPath("$.authorImage").value(IMAGE_URL))
+                .andExpect(jsonPath("$.authorImage").value("/image/" + IMAGE_ID))
                 .andExpect(jsonPath("$.authorFirstName").value(USER_FIRSTNAME))
                 .andExpect(jsonPath("$.createdAt").value(CREATED_AT))
                 .andExpect(jsonPath("$.pk").value(COMMENT_ID))

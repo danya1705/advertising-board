@@ -23,8 +23,7 @@ class AdsMapperTest {
     public static final String USER_LASTNAME = "User lastname";
     public static final String EMAIL = "Users e-mail";
     public static final String PHONE = "Users phone";
-    public static final String IMAGE_FILEPATH = "images\\jpg.png";
-    public static final String IMAGE_URL = "/img/jpg.png";
+    public static final int IMAGE_ID = 1111;
 
     private final AdsMapperImpl adsMapper = new AdsMapperImpl();
 
@@ -32,7 +31,7 @@ class AdsMapperTest {
     void toAdsDtoTest() {
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         User user = new User();
         user.setId(USER_ID);
@@ -52,14 +51,14 @@ class AdsMapperTest {
         Assertions.assertThat(adsDto.getPrice()).isEqualTo(PRICE);
         Assertions.assertThat(adsDto.getPk()).isEqualTo(PK);
         Assertions.assertThat(adsDto.getAuthor()).isEqualTo(USER_ID);
-        Assertions.assertThat(adsDto.getImage()).isEqualTo(IMAGE_URL);
+        Assertions.assertThat(adsDto.getImage()).isEqualTo("/image/" + IMAGE_ID);
     }
 
     @Test
     void toFullAdsDtoTest() {
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         User user = new User();
         user.setId(USER_ID);
@@ -87,7 +86,7 @@ class AdsMapperTest {
         Assertions.assertThat(fullAdsDto.getAuthorLastName()).isEqualTo(USER_LASTNAME);
         Assertions.assertThat(fullAdsDto.getEmail()).isEqualTo(EMAIL);
         Assertions.assertThat(fullAdsDto.getPhone()).isEqualTo(PHONE);
-        Assertions.assertThat(fullAdsDto.getImage()).isEqualTo(IMAGE_URL);
+        Assertions.assertThat(fullAdsDto.getImage()).isEqualTo("/image/" + IMAGE_ID);
     }
 
     @Test

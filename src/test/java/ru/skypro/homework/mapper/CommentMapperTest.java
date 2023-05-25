@@ -24,8 +24,7 @@ class CommentMapperTest {
     public static final String USER_FIRST_NAME = "firstName";
     public static final String WRONG_USER_FIRST_NAME = "wrongFirstName";
     public static final String WRONG_IMAGE_URL = "Some wrong URL";
-    public static final String IMAGE_FILEPATH = "images\\jpg.png";
-    public static final String IMAGE_URL = "/img/jpg.png";
+    public static final int IMAGE_ID = 1111;
 
     private final CommentMapperImpl commentMapper = new CommentMapperImpl();
 
@@ -33,7 +32,7 @@ class CommentMapperTest {
     void toDtoTest() {
 
         Image image = new Image();
-        image.setFilePath(IMAGE_FILEPATH);
+        image.setId(IMAGE_ID);
 
         User user = new User();
         user.setId(USER_ID);
@@ -55,7 +54,7 @@ class CommentMapperTest {
         Assertions.assertThat(dto.getCreatedAt()).isEqualTo(DATE_MILLIS);
         Assertions.assertThat(dto.getAuthor()).isEqualTo(USER_ID);
         Assertions.assertThat(dto.getAuthorFirstName()).isEqualTo(USER_FIRST_NAME);
-        Assertions.assertThat(dto.getAuthorImage()).isEqualTo(IMAGE_URL);
+        Assertions.assertThat(dto.getAuthorImage()).isEqualTo("/image/" + IMAGE_ID);
 
     }
 

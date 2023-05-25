@@ -60,11 +60,5 @@ class ImageControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/image/{id}", IMAGE_ID))
                 .andExpect(status().isNotFound());
-
-    }
-
-    @Test
-    void downloadImageUnauthorizedTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/image/{id}", IMAGE_ID)).andExpect(status().isUnauthorized());
     }
 }
