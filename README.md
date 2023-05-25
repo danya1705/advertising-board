@@ -13,7 +13,10 @@
 
 
 # Установка и запуск образа фронтэнд-части в Docker
-
+- для установки образа прописать команду через командную строку:
+  docker pull ghcr.io/bizinmitya/front-react-avito:v1.13
+- для запуска прописать команду через командную строку:
+  docker run --rm --name front-react-avito-v1.13-instance -p3000:3000 ghcr.io/bizinmitya/front-react-avito:v1.13
 
 # Технологии в проекте
 Язык и окружение - Java 17, Spring Boot 2.7.10, Hibernate, PostgreSQL, Lombok, Spring Doc Open Api   
