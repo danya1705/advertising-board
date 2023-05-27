@@ -7,6 +7,8 @@ import org.mapstruct.MappingTarget;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateCommentDto;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.User;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface CommentMapper {
@@ -14,13 +16,35 @@ public interface CommentMapper {
     /**
      * Маппинг комментария в объект CommentDto.
      * <p>
-     * @throws NullPointerException если поле comment.author.image == null.
+     * Аватар пользователя преобразуется из пути в файловой системе в URL-ссылку на изображение.
+     * Если он равен null, в commentDto.authorImage также запишется null.
      */
-    @Mapping(source = "commentId", target = "pk")
-    @Mapping(source = "author.id", target = "author")
-    @Mapping(target = "authorImage", expression = "java(\"/image/\" + comment.getAuthor().getImage().getId())")
-    @Mapping(source = "author.firstName", target = "authorFirstName")
-    CommentDto toDto(Comment comment);
+    default CommentDto toDto(Comment comment) {
+
+        if (comment == null) {
+            return null;
+        }
+
+        CommentDto commentDto = new CommentDto();
+        commentDto.setPk(comment.getCommentId());
+        commentDto.setCreatedAt(comment.getCreatedAt());
+        commentDto.setText(comment.getText());
+
+        User author = comment.getAuthor();
+        if (author != null) {
+
+            commentDto.setAuthor(comment.getAuthor().getId());
+            commentDto.setAuthorFirstName(comment.getAuthor().getFirstName());
+
+            Image image = author.getImage();
+            if (image != null) {
+                commentDto.setAuthorImage("/image/" + comment.getAuthor().getImage().getId());
+            }
+        }
+
+        return commentDto;
+    }
+
 
     /**
      * Создание комментария с единственным заполненным полем text из объекта CreateCommentDto.
