@@ -12,21 +12,20 @@ import ru.skypro.homework.entity.Ads;
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AdsMapper {
+
     /**
-     * Создание неполного AdsDto по модели User
+     * Маппинг объявления в объект AdsDto.
      *
-     * @param ad объявление
-     * @return AdsDto
+     * @throws NullPointerException если поле ad.image == null.
      */
     @Mapping(source = "author.id", target = "author")
     @Mapping(target = "image", expression = "java(\"/image/\" + ad.getImage().getId())")
     AdsDto toDto(Ads ad);
 
     /**
-     * Создание полного AdsDto по модели User
+     * Маппинг объявления в объект FullAdsDto.
      *
-     * @param ad объявление
-     * @return AdsDto
+     * @throws NullPointerException если поле ad.image == null.
      */
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "author.lastName", target = "authorLastName")
@@ -36,17 +35,12 @@ public interface AdsMapper {
     FullAdsDto toFullAdsDto(Ads ad);
 
     /**
-     * Соотнесение данных из Dto в сущность объявления
-     *
-     * @param createAdsDto Dto с данными объявления
+     * Создание объявления из объекта createAdsDto.
      */
     Ads toAds(CreateAdsDto createAdsDto);
 
     /**
-     * Изменение данных об объявлении
-     *
-     * @param createAdsDto ID объявления
-     * @param ad           пользователь
+     * Обновление полей объявления данными из объекта CreateAdsDto.
      */
     void updateAds(CreateAdsDto createAdsDto, @MappingTarget Ads ad);
 }

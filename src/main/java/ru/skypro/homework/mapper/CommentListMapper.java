@@ -11,10 +11,10 @@ import ru.skypro.homework.entity.Ads;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         imports = Ads.class)
 public interface CommentListMapper {
+
     /**
-     * Создание оболочки ответа со списком комментариев одного объявления
-     *
-     * @param ad объявление
+     * Маппинг списка комментариев объявления в объект ResponseWrapperCommentDto,
+     * содержащий сам список и поле с количеством записей в нём.
      */
     @Mapping(expression = "java(ad.getCommentsList().size())", target = "count")
     @Mapping(source = "commentsList", target = "results")

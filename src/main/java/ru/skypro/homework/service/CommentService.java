@@ -29,22 +29,22 @@ public class CommentService {
     private final CommentListMapper commentListMapper;
 
     /**
-     * Получение списка комментариев по ID объявления
+     * Получение списка комментариев объявления.
      *
-     * @param id ID объявления
-     * @return ResponseWrapperCommentDto
+     * @param id id объявления.
+     * @return Список комментариев в формате ResponseWrapperCommentDto.
      */
     public ResponseWrapperCommentDto getCommentsByAdId(Integer id) {
         return commentListMapper.toResponseWrapperCommentDto(adsService.getAdById(id));
     }
 
     /**
-     * Добавление комментария
+     * Добавление комментария.
      *
-     * @param id               ID объявления
-     * @param createCommentDto DTO для создания комментария
-     * @param username         Username пользователя
-     * @return CommentDto
+     * @param id               id объявления.
+     * @param createCommentDto текст комментария.
+     * @param username         имя пользователя из аутентификации.
+     * @return Созданный комментарий в формате CommentDto.
      */
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, String username) {
 
@@ -61,11 +61,11 @@ public class CommentService {
     }
 
     /**
-     * Удаление комментария
+     * Удаление комментария из базы данных.
      *
-     * @param commentId ID комментария
-     * @param username  Username пользователя
-     * @return boolean
+     * @param commentId id комментария.
+     * @param username  имя пользователя из аутентификации.
+     * @return true - если удаление прошло успешно, false - если удаление было запрещено из-за недостатка прав.
      */
     public boolean deleteComment(Integer commentId, String username) {
 
@@ -81,12 +81,13 @@ public class CommentService {
     }
 
     /**
-     * Изменение комментария
+     * Обновление комментария в базе данных.
      *
-     * @param commentId  ID комментария
-     * @param commentDto DTO комментария
-     * @param username   Username пользователя
-     * @return Optional
+     * @param commentId  id комментария.
+     * @param commentDto dto с данными для обновления.
+     * @param username   имя пользователя из аутентификации.
+     * @return Обновлённый комментарий в формате CommentDto, если операция прошла успешно,
+     * или пустой Optional, если обновление было запрещено из-за недостатка прав.
      */
     public Optional<CommentDto> updateComment(Integer commentId, CommentDto commentDto, String username) {
 
@@ -102,10 +103,7 @@ public class CommentService {
     }
 
     /**
-     * Получение комментария из БД
-     *
-     * @param id ID комментария
-     * @return Comment
+     * Получение комментария из базы данных по id.
      */
     public Comment getCommentById(Integer id) {
         return commentRepository.findById(id)

@@ -10,11 +10,11 @@ import ru.skypro.homework.entity.Comment;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface CommentMapper {
+
     /**
-     * Создание CommentDto по модели Comment
-     *
-     * @param comment комментарий
-     * @return CommentDto
+     * Маппинг комментария в объект CommentDto.
+     * <p>
+     * @throws NullPointerException если поле comment.author.image == null.
      */
     @Mapping(source = "commentId", target = "pk")
     @Mapping(source = "author.id", target = "author")
@@ -23,17 +23,12 @@ public interface CommentMapper {
     CommentDto toDto(Comment comment);
 
     /**
-     * Соотнесение данных из Dto в сущность комментария
-     *
-     * @param createCommentDto Dto с данными зарегестрированного пользователя
+     * Создание комментария с единственным заполненным полем text из объекта CreateCommentDto.
      */
     Comment toComment(CreateCommentDto createCommentDto);
 
     /**
-     * Обновление комментария
-     *
-     * @param commentDto Dto обновленного комментария
-     * @param comment    обновляемый комментарий
+     * Обновление поля text в комментарии данными из объекта CommentDto.
      */
     @Mapping(target = "ad", ignore = true)
     @Mapping(target = "commentId", ignore = true)

@@ -26,21 +26,19 @@ public class UserService {
     private final PasswordEncoder encoder;
 
     /**
-     * Получение информации о пользователе в виде DTO
+     * Получение информации о пользователе.
      *
-     * @param username Username пользователя
+     * @param username имя пользователя из аутентификации.
      */
     public UserDto getUserInfo(String username) {
         return userMapper.toDto(getUserByUsername(username));
     }
 
     /**
-     * Изменение данных о пользователе
+     * Изменение данных пользователя.
      *
-     * @param userDto  DTO с новыми данными о пользователе, которые будут
-     *                 записаны взамен старых данных
-     * @param username Username пользователя
-     * @return UserDto
+     * @param userDto  dto с новыми данными.
+     * @param username имя пользователя из аутентификации.
      */
     public UserDto updateUser(UserDto userDto, String username) {
         User user = getUserByUsername(username);
@@ -49,11 +47,11 @@ public class UserService {
     }
 
     /**
-     * Изменение пароля пользователя
+     * Изменение пароля пользователя.
      *
-     * @param newPasswordDto DTO с новым паролем пользователя
-     * @param username       Username пользователя
-     * @return boolean
+     * @param newPasswordDto dto с новым и текущим паролями.
+     * @param username       имя пользователя из аутентификации.
+     * @return true - если пароль изменён, false - если проверка текущего пароля провалилась.
      */
     public boolean editUserPassword(NewPasswordDto newPasswordDto, String username) {
         User user = getUserByUsername(username);
@@ -68,10 +66,10 @@ public class UserService {
     }
 
     /**
-     * Изменение изображения пользователя
+     * Изменение аватара пользователя.
      *
-     * @param imageFile файл изображения
-     * @param username  username пользователя
+     * @param imageFile файл изображения.
+     * @param username  имя пользователя из аутентификации.
      */
     public void editUserImage(MultipartFile imageFile, String username) throws IOException {
         User user = getUserByUsername(username);
@@ -82,10 +80,7 @@ public class UserService {
     }
 
     /**
-     * Получение пользователя из БД по username
-     *
-     * @param username Username пользователя
-     * @return User
+     * Получение пользователя из базы данных по username.
      */
     public User getUserByUsername(String username) {
         return userRepository.findByUserName(username)

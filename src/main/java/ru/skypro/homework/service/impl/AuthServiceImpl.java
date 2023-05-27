@@ -18,11 +18,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     /**
-     * Авторизация пользователя
-     *
-     * @param userName логин пользователя
-     * @param password пароль пользователя
-     * @return boolean
+     * Аутентификация пользователя.
      */
     @Override
     public boolean login(String userName, String password) {
@@ -32,11 +28,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Внесение нового пользователя в БД при регистрации
+     * Внесение нового пользователя в базу данных при регистрации.
      *
-     * @param registerReqDto DTO регистрации пользователя
-     * @param role           роль пользователя
-     * @return boolean
+     * @param registerReqDto dto с данными пользователя.
+     * @param role           роль пользователя.
+     * @return true - если регистрация прошла успешно, false - если имя пользователя уже занято.
      */
     @Override
     public boolean register(RegisterReqDto registerReqDto, Role role) {

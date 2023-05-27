@@ -34,10 +34,7 @@ public class AdsService {
     private final AdsListMapper listMapper;
 
     /**
-     * Получение объявления по id
-     *
-     * @param id ID объявления
-     * @return Ads
+     * Получение из базы данных объявления с указанным id.
      */
     public Ads getAdById(Integer id) {
         return adsRepository.findById(id)
@@ -45,11 +42,11 @@ public class AdsService {
     }
 
     /**
-     * Изменение изображения объявления
+     * Изменение изображения объявления.
      *
-     * @param adId      ID объявления
-     * @param imageFile изображение
-     * @return byte[]
+     * @param adId      id объявления.
+     * @param imageFile новое изображение.
+     * @return новое изображение в формате byte[].
      */
     public byte[] editAdImage(Integer adId, MultipartFile imageFile) throws IOException {
         Ads ad = getAdById(adId);
@@ -61,12 +58,11 @@ public class AdsService {
     }
 
     /**
-     * Создание объявления
+     * Создание нового объявления.
      *
-     * @param createAdsDto DTO для создания объявления
-     * @param imageFile    изображение
-     * @param username     username пользователя
-     * @return AdsDto
+     * @param createAdsDto dto с данными для создания объявления.
+     * @param imageFile    картинка объявления.
+     * @param username     имя пользователя из аутентификации.
      */
     public AdsDto createAd(CreateAdsDto createAdsDto, MultipartFile imageFile, String username) throws IOException {
         Ads ad = mapper.toAds(createAdsDto);
@@ -77,35 +73,38 @@ public class AdsService {
     }
 
     /**
-     * Поиск объявления по части имени
+     * Поиск объявления по части названия.
      *
-     * @param titlePart часть названия для поиска
-     * @return ResponseWrapperAdsDto
+     * @param titlePart часть названия для поиска.
+     * @return Список объявлений в формате ResponseWrapperAdsDto.
      */
     public ResponseWrapperAdsDto getAdsByTitlePart(String titlePart) {
         return listMapper.toResponseWrapperAdsDto(adsRepository.findByTitleContainingIgnoreCase(titlePart));
     }
 
     /**
-     * Получение списка всех объявлений
+     * Получение списка всех объявлений.
      *
-     * @return ResponseWrapperAdsDto
+     * @return Список объявлений в формате ResponseWrapperAdsDto.
      */
     public ResponseWrapperAdsDto getAdsAll() {
         List<Ads> ads = adsRepository.findAll();
         return listMapper.toResponseWrapperAdsDto(ads);
     }
 
+    /**
+     * Получение расширенной информации об объявлении.
+     */
     public FullAdsDto getAdInfo(Integer id) {
         return mapper.toFullAdsDto(getAdById(id));
     }
 
     /**
-     * Удаление объявления
+     * Удаление объявления из базы данных.
      *
-     * @param id       ID объявления
-     * @param username username пользователя
-     * @return boolean
+     * @param id       id объявления.
+     * @param username имя пользователя из аутентификации.
+     * @return true - если удаление прошло успешно, false - если удаление было запрещено из-за недостатка прав.
      */
     public boolean deleteAd(Integer id, String username) throws IOException {
         User user = userService.getUserByUsername(username);
@@ -122,12 +121,13 @@ public class AdsService {
     }
 
     /**
-     * Обновление объявления
+     * Обновление объявления в базе данных.
      *
-     * @param id           ID объявления
-     * @param createAdsDto DTO для обновления
-     * @param username     username пользователя
-     * @return Optional
+     * @param id           id объявления.
+     * @param createAdsDto dto с данными для обновления.
+     * @param username     имя пользователя из аутентификации.
+     * @return Обновлённое объявление в формате AdsDto, если операция прошла успешно,
+     * или пустой Optional, если обновление было запрещено из-за недостатка прав.
      */
     public Optional<AdsDto> updateAd(Integer id, CreateAdsDto createAdsDto, String username) {
         User user = userService.getUserByUsername(username);
@@ -141,10 +141,10 @@ public class AdsService {
     }
 
     /**
-     * Получение списка объявлений
+     * Получение списка объявлений конкретного пользователя.
      *
-     * @param username username пользователя
-     * @return ResponseWrapperAdsDto
+     * @param username имя пользователя из аутентификации.
+     * @return Список объявлений в формате ResponseWrapperAdsDto.
      */
     public ResponseWrapperAdsDto getAdsMe(String username) {
         List<Ads> ads = adsRepository.findByAuthor_UserName(username);

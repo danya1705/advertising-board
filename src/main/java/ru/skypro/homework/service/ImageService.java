@@ -24,10 +24,10 @@ public class ImageService {
     }
 
     /**
-     * Загрузка изображения
+     * Загрузка изображения в файловую систему.
      *
-     * @param imageFile файл изображения
-     * @return Image
+     * @param imageFile файл изображения.
+     * @return объект Image с данными изображения, сохранённый в базе данных.
      */
     public Image uploadImage(MultipartFile imageFile) throws IOException {
 
@@ -44,6 +44,9 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
+    /**
+     * Удаление изображения из файловой системы и базы данных.
+     */
     public void deleteImage(Image image) throws IOException {
 
         if (image != null) {

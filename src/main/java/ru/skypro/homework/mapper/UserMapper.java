@@ -14,7 +14,7 @@ import ru.skypro.homework.entity.User;
 public interface UserMapper {
 
     /**
-     * Маппинг сущности User в объект UserDto.
+     * Маппинг пользователя в объект UserDto.
      * <p>
      * Поле image преобразуется из пути в файловой системе в URL-ссылку на изображение.
      * Если поле user.image равно null, в userDto.image также запишется null.
@@ -43,9 +43,7 @@ public interface UserMapper {
     }
 
     /**
-     * Обновление сущности User данными из UserDto.
-     * <p>
-     * В маппинге используются поля firstName, lastName и phone, остальные поля игнорируются.
+     * Обновление полей пользователя firstName, lastName и phone данными из UserDto.
      */
     @Mapping(target = "user.image", ignore = true)
     @Mapping(target = "id", ignore = true)
@@ -53,13 +51,13 @@ public interface UserMapper {
     void updateUser(UserDto userDto, @MappingTarget User user);
 
     /**
-     * Обновление поля password в сущности User.
+     * Обновление поля password в пользователе.
      */
     @Mapping(source = "newPasswordDto.newPassword", target = "password")
     void updateUserPassword(NewPasswordDto newPasswordDto, @MappingTarget User user);
 
     /**
-     * Маппинг объекта RegisterReqDto в сущность User при регистрации нового пользователя.
+     * Создание нового пользователя с данными из объекта RegisterReqDto при регистрации.
      */
     @Mapping(source = "username", target = "userName")
     @Mapping(source = "username", target = "email")
