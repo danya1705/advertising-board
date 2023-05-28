@@ -10,6 +10,8 @@ import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 
+import java.util.Objects;
+
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface CommentMapper {
 
@@ -27,8 +29,9 @@ public interface CommentMapper {
 
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getCommentId());
-        commentDto.setCreatedAt(comment.getCreatedAt());
         commentDto.setText(comment.getText());
+
+        commentDto.setCreatedAt(Objects.requireNonNullElse(comment.getCreatedAt(), 0L));
 
         User author = comment.getAuthor();
         if (author != null) {
